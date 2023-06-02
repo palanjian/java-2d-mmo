@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.net.Socket;
 
 import javax.swing.JPanel;
 
@@ -28,6 +29,11 @@ public class GamePanel extends JPanel implements Runnable{
 	int playerY= 100;
 	int playerSpeed = 4;
 	
+	
+	//host and port info
+	static String host = "localhost";
+	static int port = 4000;
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
@@ -37,9 +43,19 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void startGameThread() {
+		try {
+			System.out.println("Attempting to connect to server " + host + " on port:" + port);
+			Socket socket = new Socket(host, port);
+			System.out.println("Successfully connected to server");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
+
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
+	
 	@Override
 	public void run() {
 		double drawInterval = 1000000000/FPS;
@@ -82,6 +98,7 @@ public class GamePanel extends JPanel implements Runnable{
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(Color.white);
 		g2.fillRect(playerX, playerY, tileSize, tileSize);
+
 		g2.dispose();
 	}
 }
