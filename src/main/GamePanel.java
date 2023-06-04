@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int FPS = 60;
 	KeyHandler keyHandler = new KeyHandler();
 	Thread gameThread;
+	Thread nonPlayerThread;
 	
 	//set players default position
 	int playerX = 100;
@@ -38,11 +40,10 @@ public class GamePanel extends JPanel implements Runnable{
 	static String host = "localhost";
 	static int port = 4000;
 	static Socket socket;
-	
-	//printwriter test
+
 	static PlayerInfo playerInfo;
-	OutputStream outputStream;
 	ObjectOutputStream objectOutputStream;
+	String username = "Peter";
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -57,26 +58,23 @@ public class GamePanel extends JPanel implements Runnable{
 		try {
 			System.out.println("Attempting to connect to server " + host + " on port:" + port);
 			socket = new Socket(host, port);
-			System.out.println("Successfully connected to server");
-			
+			System.out.println(username + "has successfully connected to server");
+
+			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			playerInfo = new PlayerInfo(username, playerX, playerY);
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
-		
-		
-		//printwriter test
-		playerInfo = new PlayerInfo("Peter", playerX, playerY);
-		try {
-			outputStream = socket.getOutputStream();
-			objectOutputStream = new ObjectOutputStream(outputStream);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
 
+		//begins to run the game loop
 		gameThread = new Thread(this);
 		gameThread.start();
+		
+		//beings running the thread that receives & displays information on other players
+		nonPlayerThread = new NonPlayerHandler(socket);
+		nonPlayerThread.start();
 	}
 	
 	@Override
@@ -87,13 +85,13 @@ public class GamePanel extends JPanel implements Runnable{
 		long currentTime;
 		
 		while(gameThread != null) {
-			//gameloop
+			//game loop
 			currentTime = System.nanoTime();
 			delta += (currentTime - lastTime) / drawInterval;
 			lastTime = currentTime;
 			if(delta >=1) {
 				update();
-				repaint(); //calls paintComponent
+				repaint(); //calls paintComponent		
 				--delta;
 			}
 		}
@@ -103,56 +101,40 @@ public class GamePanel extends JPanel implements Runnable{
 
 		if(keyHandler.upPressed == true) {
 			playerY -= playerSpeed;
-			//printwriter test	
 			playerInfo.updatePosition(playerX, playerY);
 			
 			try {
 				objectOutputStream.writeUnshared(playerInfo);
 				objectOutputStream.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 		if(keyHandler.downPressed == true) {
 			playerY += playerSpeed;
-			//printwriter test
 			playerInfo.updatePosition(playerX, playerY);
+			
 			try {
 				objectOutputStream.writeUnshared(playerInfo);
 				objectOutputStream.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} catch (IOException e) { e.printStackTrace(); }
 
 		}
 		if(keyHandler.leftPressed == true) {
 			playerX -= playerSpeed;
-			//printwriter test
 			playerInfo.updatePosition(playerX, playerY);
+
 			try {
 				objectOutputStream.writeUnshared(playerInfo);
 				objectOutputStream.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 		if(keyHandler.rightPressed == true) {
 			playerX += playerSpeed;
-			//printwriter test
 			playerInfo.updatePosition(playerX, playerY);
+			
 			try {
 				objectOutputStream.writeUnshared(playerInfo);
 				objectOutputStream.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 	}
 	
