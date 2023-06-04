@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.JPanel;
@@ -33,6 +35,10 @@ public class GamePanel extends JPanel implements Runnable{
 	//host and port info
 	static String host = "localhost";
 	static int port = 4000;
+	static Socket socket;
+	
+	//printwriter test
+	PrintWriter pw;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -40,16 +46,27 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setDoubleBuffered(true); //all drawing will be done in an offscreen painting buffer	
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);
+		
 	}
 	
 	public void startGameThread() {
 		try {
 			System.out.println("Attempting to connect to server " + host + " on port:" + port);
-			Socket socket = new Socket(host, port);
+			socket = new Socket(host, port);
 			System.out.println("Successfully connected to server");
-		} catch (Exception e) {
+			
+		}
+		catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.exit(0);
+		}
+		
+		
+		//printwriter test
+		try {
+			pw = new PrintWriter(socket.getOutputStream());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 
 		gameThread = new Thread(this);
@@ -77,17 +94,30 @@ public class GamePanel extends JPanel implements Runnable{
 	}	
 	
 	public void update() {
+
 		if(keyHandler.upPressed == true) {
 			playerY -= playerSpeed;
+			//printwriter test	
+			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
+			pw.flush();
 		}
 		if(keyHandler.downPressed == true) {
 			playerY += playerSpeed;
+			//printwriter test
+			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
+			pw.flush();
 		}
 		if(keyHandler.leftPressed == true) {
 			playerX -= playerSpeed;
+			//printwriter test
+			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
+			pw.flush();
 		}
 		if(keyHandler.rightPressed == true) {
 			playerX += playerSpeed;
+			//printwriter test
+			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
+			pw.flush();
 		}
 	}
 	
