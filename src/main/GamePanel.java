@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -38,7 +40,9 @@ public class GamePanel extends JPanel implements Runnable{
 	static Socket socket;
 	
 	//printwriter test
-	PrintWriter pw;
+	static PlayerInfo playerInfo;
+	OutputStream outputStream;
+	ObjectOutputStream objectOutputStream;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -63,8 +67,10 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		
 		//printwriter test
+		playerInfo = new PlayerInfo("Peter", playerX, playerY);
 		try {
-			pw = new PrintWriter(socket.getOutputStream());
+			outputStream = socket.getOutputStream();
+			objectOutputStream = new ObjectOutputStream(outputStream);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -98,26 +104,55 @@ public class GamePanel extends JPanel implements Runnable{
 		if(keyHandler.upPressed == true) {
 			playerY -= playerSpeed;
 			//printwriter test	
-			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
-			pw.flush();
+			playerInfo.updatePosition(playerX, playerY);
+			
+			try {
+				objectOutputStream.writeUnshared(playerInfo);
+				objectOutputStream.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		if(keyHandler.downPressed == true) {
 			playerY += playerSpeed;
 			//printwriter test
-			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
-			pw.flush();
+			playerInfo.updatePosition(playerX, playerY);
+			try {
+				objectOutputStream.writeUnshared(playerInfo);
+				objectOutputStream.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		if(keyHandler.leftPressed == true) {
 			playerX -= playerSpeed;
 			//printwriter test
-			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
-			pw.flush();
+			playerInfo.updatePosition(playerX, playerY);
+			try {
+				objectOutputStream.writeUnshared(playerInfo);
+				objectOutputStream.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		if(keyHandler.rightPressed == true) {
 			playerX += playerSpeed;
 			//printwriter test
-			pw.println("Player's position is now X= " + playerX + " Y=" + playerY);
-			pw.flush();
+			playerInfo.updatePosition(playerX, playerY);
+			try {
+				objectOutputStream.writeUnshared(playerInfo);
+				objectOutputStream.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 	}
 	
