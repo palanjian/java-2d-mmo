@@ -3,8 +3,11 @@ package main;
 import javax.swing.JFrame;
 
 public class Main {
+	
+	static JFrame window;
+	
 	public static void main(String[] args) {
-		JFrame window = new JFrame();
+		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setTitle("Java2DMMO");
@@ -15,8 +18,11 @@ public class Main {
 		window.pack();
 		
 		window.setLocationRelativeTo(null);
-		window.setVisible(true);
+		window.setVisible(false);
 		
 		gamePanel.startGameThread();
+	}
+	public static void setVisible() {
+		window.setVisible(true);
 	}
 }

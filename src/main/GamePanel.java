@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 import javax.swing.JPanel;
 
@@ -51,28 +52,33 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setDoubleBuffered(true); //all drawing will be done in an offscreen painting buffer	
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);
-		
 	}
 	
 	public void startGameThread() {
 		try {
 			System.out.println("Attempting to connect to server " + host + " on port:" + port);
 			socket = new Socket(host, port);
-			System.out.println(username + "has successfully connected to server");
-
+			System.out.println("Successfully connected to server. Please enter your username:");
+			Scanner scan = new Scanner(System.in);
+			username = scan.nextLine().strip();
+			
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			playerInfo = new PlayerInfo(username, playerX, playerY);
+			
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
-
+		
+		//if user is able to connect to socket, enters username -> display the screen
+		Main.setVisible();
+		
 		//begins to run the game loop
 		gameThread = new Thread(this);
 		gameThread.start();
 		
-		//beings running the thread that receives & displays information on other players
+		//begins running the thread that receives & displays information on other players
 		nonPlayerThread = new NonPlayerHandler(socket);
 		nonPlayerThread.start();
 	}
