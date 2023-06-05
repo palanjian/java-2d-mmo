@@ -5,10 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +46,6 @@ public class GamePanel extends JPanel implements Runnable{
 	ObjectOutputStream objectOutputStream;
 	String username = "Peter";
 	
-	//attempting to draw to screen
 	private Map<Integer, PlayerInfo> allPlayerInfos;
 	int idUpperBound = 2048;
 	
@@ -164,21 +160,16 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		for(PlayerInfo p : allPlayerInfos.values()) {
 			g2.setColor(Color.white);
-			g2.fillRect(p.playerX, p.playerY, 48, 48);	//hardcoding tile size
+			g2.fillRect(p.getPlayerX(), p.getPlayerY(), 48, 48); //hardcoding tile size
 		}
 		g2.dispose();
 	}
 	
 	public void pRemovePlayer(PlayerInfo player) {
-		allPlayerInfos.remove(player.id);
+		allPlayerInfos.remove(player.getId()); //O(1)
 	}
 	
 	public void pAddPlayer(PlayerInfo player) {
-		allPlayerInfos.put(player.id, player);
+		allPlayerInfos.put(player.getId(), player); //O(1)
 	}
-	public boolean pContainsPlayer(PlayerInfo player) {
-		if(allPlayerInfos.get(player.id) != null) return true;
-		return false;
-	}
-
 }
