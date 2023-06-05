@@ -79,7 +79,8 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread.start();
 		
 		//begins running the thread that receives & displays information on other players
-		nonPlayerThread = new NonPlayerHandler(socket);
+		NonPlayerHandler nonPlayerHandler = new NonPlayerHandler(socket);
+		nonPlayerThread = new Thread(nonPlayerHandler);
 		nonPlayerThread.start();
 	}
 	
@@ -105,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 
-		if(keyHandler.upPressed == true) {
+		if(keyHandler.upPressed) {
 			playerY -= playerSpeed;
 			playerInfo.updatePosition(playerX, playerY);
 			
@@ -114,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable{
 				objectOutputStream.flush();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
-		if(keyHandler.downPressed == true) {
+		if(keyHandler.downPressed) {
 			playerY += playerSpeed;
 			playerInfo.updatePosition(playerX, playerY);
 			
@@ -124,7 +125,7 @@ public class GamePanel extends JPanel implements Runnable{
 			} catch (IOException e) { e.printStackTrace(); }
 
 		}
-		if(keyHandler.leftPressed == true) {
+		if(keyHandler.leftPressed) {
 			playerX -= playerSpeed;
 			playerInfo.updatePosition(playerX, playerY);
 
@@ -133,7 +134,7 @@ public class GamePanel extends JPanel implements Runnable{
 				objectOutputStream.flush();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
-		if(keyHandler.rightPressed == true) {
+		if(keyHandler.rightPressed) {
 			playerX += playerSpeed;
 			playerInfo.updatePosition(playerX, playerY);
 			
