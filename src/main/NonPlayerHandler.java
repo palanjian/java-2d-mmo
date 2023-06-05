@@ -26,13 +26,6 @@ public class NonPlayerHandler implements Runnable{
 				PlayerInfo playerInfo = (PlayerInfo) objectInputStream.readObject();
 				//System.out.println(playerInfo.username + "'s position: X=" + playerInfo.playerX + " Y=" + playerInfo.playerY);
 				gamePanel.pAddPlayer(playerInfo);
-				//create a painthandler in gamepanel, pass to this class, shouldnt be a thread
-				//if the player does not already exist in the vector of players in painthandler add it to vector
-				//if player disconnects, remove from thread
-				//if the player does exist, send the new location the thread
-				//run a for loop on the painthandler that iterates through every player and paints them 
-				
-				//google if theres anything wrong w creating static classes
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

@@ -10,8 +10,10 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
-import java.util.Vector;
 
 import javax.swing.JPanel;
 
@@ -48,8 +50,9 @@ public class GamePanel extends JPanel implements Runnable{
 	String username = "Peter";
 	
 	//attempting to draw to screen
-	private Vector<PlayerInfo> allPlayerInfos;
-
+	private Map<Integer, PlayerInfo> allPlayerInfos;
+	int idUpperBound = 2048;
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
@@ -67,10 +70,14 @@ public class GamePanel extends JPanel implements Runnable{
 			username = scan.nextLine().strip();
 			
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			playerInfo = new PlayerInfo(username, playerX, playerY);
-			allPlayerInfos = new Vector<PlayerInfo>();
+			Random rand = new Random();
+			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), username, playerX, playerY);
+			allPlayerInfos = new HashMap<Integer, PlayerInfo>();
 			pAddPlayer(playerInfo);
 			
+			//sends initial location
+			objectOutputStream.writeUnshared(playerInfo);
+			objectOutputStream.flush();
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -155,7 +162,7 @@ public class GamePanel extends JPanel implements Runnable{
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		
-		for(PlayerInfo p : allPlayerInfos) {
+		for(PlayerInfo p : allPlayerInfos.values()) {
 			g2.setColor(Color.white);
 			g2.fillRect(p.playerX, p.playerY, 48, 48);	//hardcoding tile size
 		}
@@ -163,29 +170,15 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void pRemovePlayer(PlayerInfo player) {
-		allPlayerInfos.remove(player);
+		allPlayerInfos.remove(player.id);
 	}
 	
 	public void pAddPlayer(PlayerInfo player) {
-		if(pContainsPlayer(player)) {
-			pUpdatePlayer(player, player.playerX, player.playerY);
-		}
-		else { //player doesnt exist
-			allPlayerInfos.add(player);
-		}
+		allPlayerInfos.put(player.id, player);
 	}
 	public boolean pContainsPlayer(PlayerInfo player) {
-		for(PlayerInfo playerInfo : allPlayerInfos) {
-			if(playerInfo.username == player.username) return true;
-		}
+		if(allPlayerInfos.get(player.id) != null) return true;
 		return false;
 	}
-	public void pUpdatePlayer(PlayerInfo player, int playerX, int playerY) {
-		for(PlayerInfo playerInfo : allPlayerInfos) {
-			if(playerInfo.username == player.username) {
-				playerInfo.playerX = playerX;
-				playerInfo.playerY = playerY;
-			}
-		}
-	}
+
 }
