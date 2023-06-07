@@ -1,11 +1,11 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Map;
 import java.util.Random;
 
 import graphics.SpriteHandler;
@@ -23,33 +23,33 @@ public class Player extends Entity{
 	ObjectOutputStream objectOutputStream;
 	int idUpperBound = 2048;
 	
-	SpriteHandler spriteHandler;
 	String filename = "spritesheet";
 	int originalTileSize;
 	int tileSize;
 	
 	//testing animation
-	int animCounter;
-	int animFrame;
+	int epsilon;
+	int animState;
 	int animLeftOrRight;
+	Map<Integer, BufferedImage> spriteMap;
 	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
 		this.socket = socket;
+		this.originalTileSize = gamePanel.getOriginalTileSize();
+		this.tileSize = gamePanel.getTileSize();
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			Random rand = new Random();
-			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), x, y, direction); 
-			
+			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), x, y, direction, 0, SpriteHandler.bufferedImageToBytes(SpriteHandler.loadImage(filename), "PNG"));
 			//sends initial location
 			objectOutputStream.writeUnshared(playerInfo);
 			objectOutputStream.flush();
 			
-			originalTileSize = gamePanel.getOriginalTileSize();
-			tileSize = gamePanel.getTileSize();
-			spriteHandler = new SpriteHandler(filename, originalTileSize, 4, 4);
+			playerInfo.setSpritesheet(null);
+			spriteMap = SpriteHandler.getSpriteMap(SpriteHandler.loadImage(filename), 4, 4, originalTileSize);			
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -83,16 +83,16 @@ public class Player extends Entity{
 				direction = "right";
 			}
 			
-			++animCounter;
-			if(animCounter > 10) {
-				if(animFrame == 0) { animFrame = 1; }
-				else if(animFrame == 2) { animFrame = 1; }
-				else if(animFrame == 1 && animLeftOrRight == 0) { animFrame = 0; animLeftOrRight = 1; }
-				else { animFrame = 2; animLeftOrRight = 0;}
-				animCounter = 0;
+			++epsilon;
+			if(epsilon > 10) {
+				if(animState == 0) { animState = 1; }
+				else if(animState == 2) { animState = 1; }
+				else if(animState == 1 && animLeftOrRight == 0) { animState = 0; animLeftOrRight = 1; }
+				else { animState = 2; animLeftOrRight = 0;}
+				epsilon = 0;
 			}
 			
-			playerInfo.updatePosition(x, y, direction);
+			playerInfo.updatePosition(x, y, direction, animState);
 			try {
 				objectOutputStream.writeUnshared(playerInfo);
 				objectOutputStream.flush();
@@ -102,18 +102,17 @@ public class Player extends Entity{
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
-		if(direction == "down") {
-			image = spriteHandler.get(0 + animFrame);
+		if(direction.equals("down")) {
+			image = spriteMap.get(0 + animState);
 		}
-		if(direction == "left") {
-			image = spriteHandler.get(4 + animFrame);
+		if(direction.equals("left")) {
+			image = spriteMap.get(4 + animState);
 		}
-		if(direction == "right") {
-			image = spriteHandler.get(8 + animFrame);
+		if(direction.equals("right")) {
+			image = spriteMap.get(8 + animState);
 		}
-		if(direction == "up") {
-			image = spriteHandler.get(12 + animFrame);
-
+		if(direction.equals("up")) {
+			image = spriteMap.get(12 + animState);
 		}
 		g2.drawImage(image, x, y, tileSize, tileSize, null);
 	}
