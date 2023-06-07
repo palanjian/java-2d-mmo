@@ -9,6 +9,7 @@ import java.net.Socket;
 import javax.swing.JPanel;
 
 import entity.Player;
+import graphics.TileHandler;
 
 public class GamePanel extends JPanel implements Runnable{
 	
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
 	KeyHandler keyHandler = new KeyHandler();
 	Thread gameThread;
 	NonPlayerHandler nonPlayerHandler;
+	TileHandler tileHandler;
 	Thread nonPlayerThread;
 	Player player;
 
@@ -52,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			player = new Player(this, keyHandler, socket);
 			nonPlayerHandler = new NonPlayerHandler(socket, this);
+			tileHandler = new TileHandler(this);
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -97,11 +100,16 @@ public class GamePanel extends JPanel implements Runnable{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
-		player.draw(g2);
+		
+		tileHandler.draw(g2);
 		nonPlayerHandler.draw(g2);
+		player.draw(g2);
 		g2.dispose();
 	}
 	
 	public int getTileSize() { return tileSize; }	
 	public int getOriginalTileSize() { return originalTileSize; }
+	public int getMaxScreenCol() { return maxScreenCol; }
+	public int getMaxScreenRow() { return maxScreenRow; }
+
 }
