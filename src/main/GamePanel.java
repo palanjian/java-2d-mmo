@@ -14,7 +14,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//screen settings
 	final int originalTileSize = 16; //16x16 tile
-	final int scale = 3;
+	final int scale = 4;
 	
 	final int tileSize = originalTileSize * scale; //48x48
 	final int maxScreenCol = 16;
@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-		this.setBackground(Color.black);
+		this.setBackground(Color.GRAY);
 		this.setDoubleBuffered(true); //all drawing will be done in an offscreen painting buffer	
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);

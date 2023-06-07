@@ -11,10 +11,10 @@ import javax.imageio.ImageIO;
 
 public class SpriteHandler {
 	
-	public static BufferedImage loadImage(String file) {
+	public static BufferedImage loadImage(String filename) {
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File ("res/sprites/" + file + ".png"));
+			image = ImageIO.read(new File ("res/" + filename + ".png"));
 		} catch(IOException e) {
 			System.out.println("Unable to load sprite sheet");
 			System.exit(0);
@@ -22,17 +22,17 @@ public class SpriteHandler {
 		return image;
 	}
 	
-	public static Map<Integer, BufferedImage> getSpriteMap(BufferedImage image, int columns, int rows, int tileSize){
+	public static BufferedImage[] getSpriteArray(BufferedImage image, int columns, int rows, int tileSize){
 		int index = 0;
-		Map<Integer, BufferedImage> sMap = new HashMap<Integer, BufferedImage>();
+		BufferedImage[] output = new BufferedImage[columns * rows];
 		for(int col = 1; col <=columns; ++col) {
 			for(int row = 1; row <=rows; ++row) {
 				BufferedImage sprite = extractSprite(image, col, row, tileSize);
-				sMap.put(index, sprite);
+				output[index] = sprite;
 				++index;
 			}
 		}
-		return sMap;
+		return output;
 	} 
 	
 	public static BufferedImage extractSprite(BufferedImage image, int col, int row, int tileSize) {

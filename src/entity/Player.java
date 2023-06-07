@@ -23,7 +23,7 @@ public class Player extends Entity{
 	ObjectOutputStream objectOutputStream;
 	int idUpperBound = 2048;
 	
-	String filename = "spritesheet";
+	String filename = "players/DEFAULT_SPRITESHEET";
 	int originalTileSize;
 	int tileSize;
 	
@@ -31,7 +31,7 @@ public class Player extends Entity{
 	int epsilon;
 	int animState;
 	int animLeftOrRight;
-	Map<Integer, BufferedImage> spriteMap;
+	BufferedImage[] spriteArray;
 	Random rand = new Random();
 	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
@@ -49,7 +49,7 @@ public class Player extends Entity{
 			objectOutputStream.flush();
 			
 			//playerInfo.setSpritesheet(null);
-			spriteMap = SpriteHandler.getSpriteMap(SpriteHandler.loadImage(filename), 4, 4, originalTileSize);			
+			spriteArray = SpriteHandler.getSpriteArray(SpriteHandler.loadImage(filename), 4, 4, originalTileSize);			
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -66,19 +66,20 @@ public class Player extends Entity{
 	
 	public void update() {
 		if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
+			//if you want diagonal movement to be possible, change else if to simply if
 			if(keyHandler.upPressed) {
 				y -= speed;
 				direction = "up";
 			}
-			if(keyHandler.downPressed) {
+			else if(keyHandler.downPressed) {
 				y += speed;
 				direction = "down";
 			}
-			if(keyHandler.leftPressed) {
+			else if(keyHandler.leftPressed) {
 				x -= speed;
 				direction = "left";
 			}
-			if(keyHandler.rightPressed) {
+			else if(keyHandler.rightPressed) {
 				x += speed;
 				direction = "right";
 			}
@@ -102,16 +103,16 @@ public class Player extends Entity{
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
 		if(direction.equals("down")) {
-			image = spriteMap.get(0 + animState);
+			image = spriteArray[0 + animState];
 		}
 		if(direction.equals("left")) {
-			image = spriteMap.get(4 + animState);
+			image = spriteArray[4 + animState];
 		}
 		if(direction.equals("right")) {
-			image = spriteMap.get(8 + animState);
+			image = spriteArray[8 + animState];
 		}
 		if(direction.equals("up")) {
-			image = spriteMap.get(12 + animState);
+			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, x, y, tileSize, tileSize, null);
 	}

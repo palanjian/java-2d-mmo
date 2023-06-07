@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -22,7 +21,7 @@ public class NonPlayerHandler implements Runnable{
 	GamePanel gamePanel;
 	private ObjectInputStream objectInputStream;
 	private Map<Integer, PlayerInfo> allPlayerInfos;
-	private Map<Integer, Map<Integer, BufferedImage>> allPlayerSprites;
+	private Map<Integer, BufferedImage[]> allPlayerSprites;
 	
 	NonPlayerHandler(Socket socket, GamePanel gamePanel){
 		this.socket = socket;
@@ -67,26 +66,26 @@ public class NonPlayerHandler implements Runnable{
 	public void draw(Graphics2D g2) {
 		
 		for(PlayerInfo p : allPlayerInfos.values()) {
-			Map<Integer, BufferedImage> spriteMap;
+			BufferedImage[] spriteArray;
 			BufferedImage image;
 			try {
-				spriteMap = allPlayerSprites.get(p.getId());
-				image = spriteMap.get(0); //default value
+				spriteArray = allPlayerSprites.get(p.getId());
+				image = spriteArray[0]; //default value
 			}
 			catch(Exception e) {
 				break;
 			}
 			if(p.getDirection().equals("down")) {
-				image = spriteMap.get(0 + p.getAnimState());
+				image = spriteArray[0 + p.getAnimState()];
 			}
 			if(p.getDirection().equals("left")) {
-				image = spriteMap.get(4 + p.getAnimState());
+				image = spriteArray[4 + p.getAnimState()];
 			}
 			if(p.getDirection().equals("right")) {
-				image = spriteMap.get(8 + p.getAnimState());
+				image = spriteArray[8 + p.getAnimState()];
 			}
 			if(p.getDirection().equals("up")) {
-				image = spriteMap.get(12 + p.getAnimState());
+				image = spriteArray[12 + p.getAnimState()];
 			}
 			g2.drawImage(image, p.getPlayerX(), p.getPlayerY(), gamePanel.getTileSize(), gamePanel.getTileSize(), null);
 		}
@@ -112,8 +111,7 @@ public class NonPlayerHandler implements Runnable{
 			spritesheet = ImageIO.read(is);
 		} catch (IOException e) { e.printStackTrace(); }
 		
-		Map<Integer, BufferedImage> spriteMap = SpriteHandler.getSpriteMap(spritesheet, 4, 4, gamePanel.getOriginalTileSize());
+		BufferedImage[] spriteMap = SpriteHandler.getSpriteArray(spritesheet, 4, 4, gamePanel.getOriginalTileSize());
 		allPlayerSprites.put(player.getId(), spriteMap);
 	}
-	
 }
