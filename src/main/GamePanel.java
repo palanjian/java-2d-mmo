@@ -101,4 +101,7 @@ public class GamePanel extends JPanel implements Runnable{
 		nonPlayerHandler.draw(g2);
 		g2.dispose();
 	}
+	
+	public int getTileSize() { return tileSize; }	
+	public int getOriginalTileSize() { return originalTileSize; }
 }
