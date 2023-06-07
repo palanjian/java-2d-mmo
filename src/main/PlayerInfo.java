@@ -56,7 +56,7 @@ public class PlayerInfo implements Serializable{
 
 	public void setAnimState(int animState) { this.animState = animState; }
 
-	public boolean isOnline() { return online; }
+	public boolean getOnline() { return online; }
 
 	public void setOnline(boolean online) { this.online = online; }
 }

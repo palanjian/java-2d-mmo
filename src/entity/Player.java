@@ -32,6 +32,7 @@ public class Player extends Entity{
 	int animState;
 	int animLeftOrRight;
 	Map<Integer, BufferedImage> spriteMap;
+	Random rand = new Random();
 	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		this.gamePanel = gamePanel;
@@ -42,13 +43,12 @@ public class Player extends Entity{
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			Random rand = new Random();
 			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), x, y, direction, 0, SpriteHandler.bufferedImageToBytes(SpriteHandler.loadImage(filename), "PNG"));
 			//sends initial location
 			objectOutputStream.writeUnshared(playerInfo);
 			objectOutputStream.flush();
 			
-			playerInfo.setSpritesheet(null);
+			//playerInfo.setSpritesheet(null);
 			spriteMap = SpriteHandler.getSpriteMap(SpriteHandler.loadImage(filename), 4, 4, originalTileSize);			
 		}
 		catch(Exception e) {
@@ -58,10 +58,10 @@ public class Player extends Entity{
 	}
 	
 	public void setDefaultValues() {
-		x = 100;
-		y = 100;
+		x = rand.nextInt(750);
+		y = rand.nextInt(550);
 		speed = 4;
-		direction = "up";
+		direction = "down";
 	}
 	
 	public void update() {
@@ -82,7 +82,6 @@ public class Player extends Entity{
 				x += speed;
 				direction = "right";
 			}
-			
 			++epsilon;
 			if(epsilon > 10) {
 				if(animState == 0) { animState = 1; }
