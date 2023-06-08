@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int FPS = 60;
 	KeyHandler keyHandler = new KeyHandler();
 	Thread gameThread;
-	NonPlayerHandler nonPlayerHandler;
+	RequestsHandler requestsHandler;
 	TileHandler tileHandler;
 	Thread nonPlayerThread;
 	Player player;
@@ -35,8 +35,6 @@ public class GamePanel extends JPanel implements Runnable{
 	static String host = "localhost";
 	static int port = 4000;
 	static Socket socket;
-	
-
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -53,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Successfully connected to server.");
 			
 			player = new Player(this, keyHandler, socket);
-			nonPlayerHandler = new NonPlayerHandler(socket, this);
+			requestsHandler = new RequestsHandler(socket, this);
 			tileHandler = new TileHandler(this);
 		}
 		catch (Exception e) {
@@ -69,7 +67,7 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread.start();
 		
 		//begins running the thread that receives & displays information on other players
-		nonPlayerThread = new Thread(nonPlayerHandler);			
+		nonPlayerThread = new Thread(requestsHandler);			
 		nonPlayerThread.start();
 	}
 	
@@ -101,8 +99,7 @@ public class GamePanel extends JPanel implements Runnable{
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		
-		tileHandler.draw(g2);
-		nonPlayerHandler.draw(g2);
+		requestsHandler.draw(g2);
 		player.draw(g2);
 		g2.dispose();
 	}

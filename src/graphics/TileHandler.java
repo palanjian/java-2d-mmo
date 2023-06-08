@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import main.GamePanel;
+import packets.TileMap;
 
 public class TileHandler {
 	
@@ -28,15 +29,14 @@ public class TileHandler {
 	BufferedImage spritesheet;
 	BufferedImage[] tiles;
 	
-	
 	public TileHandler(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 		this.tileSize = gamePanel.getTileSize();
 		this.originalTileSize = gamePanel.getOriginalTileSize();
 		
 		mapBlueprint = new int[maxWorldRow][maxWorldCol];
-		spritesheet = SpriteHandler.loadImage(filename);
-		tiles = SpriteHandler.getSpriteArray(spritesheet, columns, rows, originalTileSize);
+		spritesheet = GraphicsUtil.loadImage(filename);
+		tiles = GraphicsUtil.getSpriteArray(spritesheet, columns, rows, originalTileSize);
 		loadMap();
 	}
 	
@@ -69,5 +69,8 @@ public class TileHandler {
 				}
 			}
 		} catch(Exception e) { e.printStackTrace(); }
+	}
+	public void service(TileMap tileMap){
+		
 	}
 }

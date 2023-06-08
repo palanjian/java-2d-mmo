@@ -8,10 +8,10 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.Random;
 
-import graphics.SpriteHandler;
+import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
-import main.PlayerInfo;
+import packets.PlayerInfo;
 
 public class Player extends Entity{
 	
@@ -49,13 +49,13 @@ public class Player extends Entity{
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), worldX, worldY, direction, 0, SpriteHandler.bufferedImageToBytes(SpriteHandler.loadImage(filename), "PNG"));
+			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(filename), "PNG"));
 			//sends initial location
 			objectOutputStream.writeUnshared(playerInfo);
 			objectOutputStream.flush();
 			
 			//playerInfo.setSpritesheet(null);
-			spriteArray = SpriteHandler.getSpriteArray(SpriteHandler.loadImage(filename), 4, 4, originalTileSize);			
+			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(filename), 4, 4, originalTileSize);			
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());

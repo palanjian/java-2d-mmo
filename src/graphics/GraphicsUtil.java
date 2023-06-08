@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-public class SpriteHandler {
+public class GraphicsUtil {
 	
 	public static BufferedImage loadImage(String filename) {
 		BufferedImage image = null;
