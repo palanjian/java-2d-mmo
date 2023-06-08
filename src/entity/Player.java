@@ -34,16 +34,22 @@ public class Player extends Entity{
 	BufferedImage[] spriteArray;
 	Random rand = new Random();
 	
+	int screenX;
+	int screenY;
+	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
 		this.socket = socket;
 		this.originalTileSize = gamePanel.getOriginalTileSize();
 		this.tileSize = gamePanel.getTileSize();
+		this.screenY = gamePanel.getScreenWidth() / 2 - (gamePanel.getTileSize() / 2);
+		this.screenX = gamePanel.getScreenHeight() / 2 - (gamePanel.getTileSize() / 2);
+		System.out.println("screenX=" + screenX + "screenY=" + screenY);
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), x, y, direction, 0, SpriteHandler.bufferedImageToBytes(SpriteHandler.loadImage(filename), "PNG"));
+			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), worldX, worldY, direction, 0, SpriteHandler.bufferedImageToBytes(SpriteHandler.loadImage(filename), "PNG"));
 			//sends initial location
 			objectOutputStream.writeUnshared(playerInfo);
 			objectOutputStream.flush();
@@ -58,8 +64,8 @@ public class Player extends Entity{
 	}
 	
 	public void setDefaultValues() {
-		x = rand.nextInt(750);
-		y = rand.nextInt(550);
+		worldX = rand.nextInt(((50*64)/2)-((46*64)/2)) + ((46*64)/2);
+		worldY = rand.nextInt(((50*64)/2)-((46*64)/2)) + ((46*64)/2);
 		speed = 4;
 		direction = "down";
 	}
@@ -68,19 +74,19 @@ public class Player extends Entity{
 		if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
 			//if you want diagonal movement to be possible, change else if to simply if
 			if(keyHandler.upPressed) {
-				y -= speed;
+				worldY -= speed;
 				direction = "up";
 			}
 			else if(keyHandler.downPressed) {
-				y += speed;
+				worldY += speed;
 				direction = "down";
 			}
 			else if(keyHandler.leftPressed) {
-				x -= speed;
+				worldX -= speed;
 				direction = "left";
 			}
 			else if(keyHandler.rightPressed) {
-				x += speed;
+				worldX += speed;
 				direction = "right";
 			}
 			++epsilon;
@@ -92,7 +98,7 @@ public class Player extends Entity{
 				epsilon = 0;
 			}
 			
-			playerInfo.updatePosition(x, y, direction, animState);
+			playerInfo.updatePosition(worldX, worldY, direction, animState);
 			try {
 				objectOutputStream.writeUnshared(playerInfo);
 				objectOutputStream.flush();
@@ -114,6 +120,11 @@ public class Player extends Entity{
 		if(direction.equals("up")) {
 			image = spriteArray[12 + animState];
 		}
-		g2.drawImage(image, x, y, tileSize, tileSize, null);
+		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
 	}
+	
+	public int getWorldX() { return worldX; }
+	public int getWorldY() { return worldY; }
+	public int getScreenX() { return screenX; }
+	public int getScreenY() { return screenY; }
 }

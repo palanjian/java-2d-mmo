@@ -87,7 +87,13 @@ public class NonPlayerHandler implements Runnable{
 			if(p.getDirection().equals("up")) {
 				image = spriteArray[12 + p.getAnimState()];
 			}
-			g2.drawImage(image, p.getPlayerX(), p.getPlayerY(), gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+			
+			int worldX = p.getPlayerX();
+			int worldY = p.getPlayerY();
+			int screenX = worldX - gamePanel.getPlayer().getWorldX() + gamePanel.getPlayer().getScreenX();
+			int screenY = worldY - gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY();
+			
+			g2.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
 		}
 	}
 	

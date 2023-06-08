@@ -19,6 +19,12 @@ public class TileHandler {
 	int originalTileSize;
 	int tileSize;
 	
+	//WORLD SETTINGS
+	private final int maxWorldCol = 50;
+	private final int maxWorldRow = 50;
+	private final int worldWidth = tileSize * maxWorldCol;
+	private final int worldHeight = tileSize * maxWorldRow;
+	
 	BufferedImage spritesheet;
 	BufferedImage[] tiles;
 	
@@ -28,17 +34,24 @@ public class TileHandler {
 		this.tileSize = gamePanel.getTileSize();
 		this.originalTileSize = gamePanel.getOriginalTileSize();
 		
-		mapBlueprint = new int[gamePanel.getMaxScreenRow()][gamePanel.getMaxScreenCol()];
+		mapBlueprint = new int[maxWorldRow][maxWorldCol];
 		spritesheet = SpriteHandler.loadImage(filename);
 		tiles = SpriteHandler.getSpriteArray(spritesheet, columns, rows, originalTileSize);
 		loadMap();
 	}
 	
 	public void draw(Graphics2D g2) {
-		for(int row = 0; row < gamePanel.getMaxScreenRow(); ++row) {
-			for(int col = 0; col < gamePanel.getMaxScreenCol(); col++) {
+		for(int row = 0; row < maxWorldRow; ++row) {
+			for(int col = 0; col < maxWorldCol; col++) {
 				int whichTile = mapBlueprint[row][col];
-				g2.drawImage(tiles[whichTile], col*tileSize, row*tileSize, tileSize, tileSize, null);		
+				//mathematics to determine tile's screen position
+				int worldX = col*tileSize;
+				int worldY = row*tileSize;
+				int screenX = worldX - gamePanel.getPlayer().getWorldX() + gamePanel.getPlayer().getScreenX();
+				int screenY = worldY - gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY(); 
+
+				//only what's in our viewport
+				g2.drawImage(tiles[whichTile], screenX, screenY, tileSize, tileSize, null);		
 			}
 		}
 	}
@@ -48,15 +61,13 @@ public class TileHandler {
 			InputStream is = getClass().getResourceAsStream("/maps/map01.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			
-			for(int row = 0; row < gamePanel.getMaxScreenRow(); ++row) {
+			for(int row = 0; row < maxWorldRow; ++row) {
 				String line = br.readLine();
 				String numbers[] = line.split(" ");
-				for(int col = 0; col < gamePanel.getMaxScreenCol(); col++) {
+				for(int col = 0; col < maxWorldCol; col++) {
 					mapBlueprint[row][col] = Integer.parseInt(numbers[col]);
 				}
 			}
-			
-
 		} catch(Exception e) { e.printStackTrace(); }
 	}
 }

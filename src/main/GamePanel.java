@@ -111,5 +111,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public int getOriginalTileSize() { return originalTileSize; }
 	public int getMaxScreenCol() { return maxScreenCol; }
 	public int getMaxScreenRow() { return maxScreenRow; }
+	public int getScreenHeight() { return screenWidth; }
+	public int getScreenWidth() { return screenHeight; }
+	public Player getPlayer() { return player; }
 
 }
