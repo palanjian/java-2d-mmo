@@ -51,7 +51,10 @@ public class TileHandler {
 				int screenY = worldY - gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY(); 
 
 				//only what's in our viewport
-				g2.drawImage(tiles[whichTile], screenX, screenY, tileSize, tileSize, null);		
+				if(SpriteHandler.isInViewport(worldX, worldY, gamePanel.getPlayer().getWorldX(), gamePanel.getPlayer().getWorldY(),
+						gamePanel.getPlayer().getScreenX(), gamePanel.getPlayer().getScreenY())) {
+					g2.drawImage(tiles[whichTile], screenX, screenY, tileSize, tileSize, null);		
+				}
 			}
 		}
 	}
@@ -68,6 +71,9 @@ public class TileHandler {
 					mapBlueprint[row][col] = Integer.parseInt(numbers[col]);
 				}
 			}
-		} catch(Exception e) { e.printStackTrace(); }
+		} catch(Exception e) {
+			System.out.println("Error loading world map.");
+			System.exit(0);
+		}
 	}
 }

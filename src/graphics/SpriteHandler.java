@@ -47,4 +47,8 @@ public class SpriteHandler {
 	    return outputStream.toByteArray();
 	}
 	
+	public static boolean isInViewport(int absX, int absY, int observerX, int observerY, int screenX, int screenY) {
+		return true;
+	}
+	
 }

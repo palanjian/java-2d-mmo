@@ -23,7 +23,7 @@ public class Player extends Entity{
 	ObjectOutputStream objectOutputStream;
 	int idUpperBound = 2048;
 	
-	String filename = "players/DEFAULT_SPRITESHEET";
+	String filename = "players/ARSEN_SPRITESHEET";
 	int originalTileSize;
 	int tileSize;
 	
