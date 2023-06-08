@@ -46,6 +46,7 @@ public class RequestsHandler implements Runnable{
 				
 				//if object is TileMap
 				else if(o instanceof TileMap) {
+					System.out.println("Recieved new tilemap.");
 					TileMap tileMap = (TileMap)o; 
 					tileHandler.service(tileMap);
 				}

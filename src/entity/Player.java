@@ -45,7 +45,6 @@ public class Player extends Entity{
 		this.tileSize = gamePanel.getTileSize();
 		this.screenY = gamePanel.getScreenWidth() / 2 - (gamePanel.getTileSize() / 2);
 		this.screenX = gamePanel.getScreenHeight() / 2 - (gamePanel.getTileSize() / 2);
-		System.out.println("screenX=" + screenX + "screenY=" + screenY);
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());

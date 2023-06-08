@@ -36,6 +36,10 @@ public class GamePanel extends JPanel implements Runnable{
 	static int port = 4000;
 	static Socket socket;
 	
+	String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
+	int spriteSheetRows = 40;
+	int spriteSheetColumns = 36;
+			
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.GRAY);
@@ -111,5 +115,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public int getScreenHeight() { return screenWidth; }
 	public int getScreenWidth() { return screenHeight; }
 	public Player getPlayer() { return player; }
-
+	public String getSpriteSheetFileName() { return spriteSheetFileName; }
+	public int getSpriteSheetRows() { return spriteSheetRows; }
+	public int getSpriteSheetColumns() { return spriteSheetColumns; }
 }

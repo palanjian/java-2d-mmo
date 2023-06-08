@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import packets.PlayerInfo;
+import packets.TileMap;
 
 public class NonPlayerGraphicsHandler {
 	
@@ -23,6 +24,7 @@ public class NonPlayerGraphicsHandler {
 		this.gamePanel = gamePanel;
         allPlayerInfos = new HashMap<>();
         allPlayerSprites = new HashMap<>();
+
 	}
 	
 	public void service(PlayerInfo player) {
