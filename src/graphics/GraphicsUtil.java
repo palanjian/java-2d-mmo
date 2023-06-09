@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import main.GamePanel;
 
 public class GraphicsUtil {
 	
@@ -47,4 +47,14 @@ public class GraphicsUtil {
 	    return outputStream.toByteArray();
 	}
 	
+	public static boolean isInViewport(GamePanel gamePanel, int absX, int absY) {
+		int playerX = gamePanel.getPlayer().getWorldX();
+		int playerY = gamePanel.getPlayer().getWorldY();
+		int screenX = gamePanel.getPlayer().getScreenX();
+		int screenY = gamePanel.getPlayer().getScreenY();
+		int tileSize = gamePanel.getTileSize();
+		if(absX + tileSize > playerX - screenX && absX - tileSize < playerX + screenX &&
+		   absY + tileSize > playerY - screenY && absY - tileSize < playerY + screenY) return true;
+		return false;
+	}
 }

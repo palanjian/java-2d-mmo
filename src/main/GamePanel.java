@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import entity.Player;
 import graphics.TileHandler;
 
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
 	
 	//screen settings

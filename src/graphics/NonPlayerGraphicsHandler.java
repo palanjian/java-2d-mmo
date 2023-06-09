@@ -7,12 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
-
 import main.GamePanel;
 import packets.PlayerInfo;
-import packets.TileMap;
 
 public class NonPlayerGraphicsHandler {
 	
@@ -95,8 +92,9 @@ public class NonPlayerGraphicsHandler {
 			int worldY = p.getPlayerY();
 			int screenX = worldX - gamePanel.getPlayer().getWorldX() + gamePanel.getPlayer().getScreenX();
 			int screenY = worldY - gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY();
-			
-			g2.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
+				g2.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+			}
 		}
 	}
 }

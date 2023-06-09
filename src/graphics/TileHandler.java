@@ -3,7 +3,6 @@ package graphics;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 import main.GamePanel;
 import packets.TileMap;
@@ -35,7 +34,9 @@ public class TileHandler {
 					int worldY = row*gamePanel.getTileSize();
 					int screenX = worldX - gamePanel.getPlayer().getWorldX() + gamePanel.getPlayer().getScreenX();
 					int screenY = worldY - gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY(); 
-					g2.drawImage(sprites[whichTile], screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);	
+					if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
+						g2.drawImage(sprites[whichTile], screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);	
+					}
 				}
 			}
 		}
