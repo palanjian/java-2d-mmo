@@ -13,7 +13,7 @@ import packets.PlayerInfo;
 
 public class NonPlayerGraphicsHandler {
 	
-	GamePanel gamePanel;
+	private GamePanel gamePanel;
 	private Map<Integer, PlayerInfo> allPlayerInfos;
 	private Map<Integer, BufferedImage[]> allPlayerSprites;
 	
@@ -21,7 +21,6 @@ public class NonPlayerGraphicsHandler {
 		this.gamePanel = gamePanel;
         allPlayerInfos = new HashMap<>();
         allPlayerSprites = new HashMap<>();
-
 	}
 	
 	public void service(PlayerInfo player) {
@@ -49,7 +48,7 @@ public class NonPlayerGraphicsHandler {
 	}
 	
 	public void removePlayerSprite(PlayerInfo player) {
-		allPlayerSprites.remove(player.getId());
+		allPlayerSprites.remove(player.getId()); //O(1)
 	}
 	
 	public void addPlayerSprite(PlayerInfo player) {
@@ -60,7 +59,7 @@ public class NonPlayerGraphicsHandler {
 			spritesheet = ImageIO.read(is);
 		} catch (IOException e) { e.printStackTrace(); }
 		
-		BufferedImage[] spriteMap = GraphicsUtil.getSpriteArray(spritesheet, 4, 4, gamePanel.getOriginalTileSize());
+		BufferedImage[] spriteMap = GraphicsUtil.getSpriteArray(spritesheet, 4, 4, gamePanel.originalTileSize);
 		allPlayerSprites.put(player.getId(), spriteMap);
 	}
 	
@@ -90,10 +89,10 @@ public class NonPlayerGraphicsHandler {
 			
 			int worldX = p.getPlayerX();
 			int worldY = p.getPlayerY();
-			int screenX = worldX - gamePanel.getPlayer().getWorldX() + gamePanel.getPlayer().getScreenX();
-			int screenY = worldY - gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY();
+			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
+			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY;
 			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
-				g2.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 			}
 		}
 	}

@@ -13,7 +13,7 @@ import packets.TileMap;
 public class RequestsHandler implements Runnable{
 	
 	private Socket socket;
-	GamePanel gamePanel;
+	private GamePanel gamePanel;
 	private ObjectInputStream objectInputStream;
 	private NonPlayerGraphicsHandler nonPlayerGraphicsHandler;
 	private TileHandler tileHandler;
@@ -21,10 +21,10 @@ public class RequestsHandler implements Runnable{
 	RequestsHandler(Socket socket, GamePanel gamePanel){
 		this.socket = socket;
 		this.gamePanel = gamePanel;
+		this.tileHandler = gamePanel.getTileHandler();
 		try {
 			objectInputStream = new ObjectInputStream(socket.getInputStream());
 			nonPlayerGraphicsHandler = new NonPlayerGraphicsHandler(gamePanel);
-			tileHandler = new TileHandler(gamePanel);
 		} catch (Exception e) {
 			System.out.println("Could not initialize input stream. Exiting.");
 			System.exit(0);
@@ -40,7 +40,6 @@ public class RequestsHandler implements Runnable{
 				//if object is PlayerInfo
 				if (o instanceof PlayerInfo) {
 				    PlayerInfo playerInfo = (PlayerInfo)o;
-				    //System.out.println(((PlayerInfo) o).getId());
 				    nonPlayerGraphicsHandler.service(playerInfo);
 				}
 				

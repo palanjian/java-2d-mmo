@@ -16,34 +16,32 @@ import packets.TileMap;
 public class GamePanel extends JPanel implements Runnable{
 	
 	//screen settings
-	final int originalTileSize = 16; //16x16 tile
-	final int scale = 4;
+	public final int originalTileSize = 16; //16x16 tile
+	public final int scale = 4;
+	public final int tileSize = originalTileSize * scale; //48x48
+	public final int maxScreenCol = 16;
+	public final int maxScreenRow = 12;
+	public final int screenWidth = tileSize * maxScreenCol; //768 pixels
+	public final int screenHeight = tileSize * maxScreenRow; //576 pixels
+	public final int FPS = 60;
 	
-	final int tileSize = originalTileSize * scale; //48x48
-	final int maxScreenCol = 16;
-	final int maxScreenRow = 12;
-	final int screenWidth = tileSize * maxScreenCol; //768 pixels
-	final int screenHeight = tileSize * maxScreenRow; //576 pixels
+	public KeyHandler keyHandler = new KeyHandler();
 	
-	final int FPS = 60;
-	KeyHandler keyHandler = new KeyHandler();
-	Thread gameThread;
-	RequestsHandler requestsHandler;
+	public Thread gameThread;
+	public RequestsHandler requestsHandler;
 	public TileHandler tileHandler;
-	Thread nonPlayerThread;
-	Player player;
+	public Thread nonPlayerThread;
+	public Player player;
 
 	//host and port info
-	static String host = "localhost";
-	static int port = 4000;
-	static Socket socket;
+	private static String host = "localhost";
+	private static int port = 4000;
+	private static Socket socket;
 	
-	String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
-	int spriteSheetRows = 40;
-	int spriteSheetColumns = 36;
-	
-	//TEST
-	public static TileMap temp;
+	//sprite sheet information
+	private String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
+	private int spriteSheetRows = 40;
+	private int spriteSheetColumns = 36;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -58,6 +56,8 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Attempting to connect to server " + host + " on port:" + port);
 			socket = new Socket(host, port);
 			System.out.println("Successfully connected to server.");
+			
+			//Instantiates all handlers
 			tileHandler = new TileHandler(this);			
 			requestsHandler = new RequestsHandler(socket, this);
 			player = new Player(this, keyHandler, socket);
@@ -67,7 +67,7 @@ public class GamePanel extends JPanel implements Runnable{
 			System.exit(0);
 		}
 		
-		//if user is able to connect to socket, enters username -> display the screen
+		//if user is able to connect to socket -> display the screen
 		Main.setVisible();
 		
 		//begins to run the game loop
@@ -112,14 +112,8 @@ public class GamePanel extends JPanel implements Runnable{
 		g2.dispose();
 	}
 	
-	public int getTileSize() { return tileSize; }	
-	public int getOriginalTileSize() { return originalTileSize; }
-	public int getMaxScreenCol() { return maxScreenCol; }
-	public int getMaxScreenRow() { return maxScreenRow; }
-	public int getScreenHeight() { return screenWidth; }
-	public int getScreenWidth() { return screenHeight; }
-	public Player getPlayer() { return player; }
 	public String getSpriteSheetFileName() { return spriteSheetFileName; }
 	public int getSpriteSheetRows() { return spriteSheetRows; }
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
+	public TileHandler getTileHandler() { return tileHandler; }
 }

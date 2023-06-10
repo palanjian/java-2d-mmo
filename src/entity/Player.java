@@ -16,47 +16,49 @@ import packets.PlayerInfo;
 
 public class Player extends Entity{
 	
-	GamePanel gamePanel;
-	KeyHandler keyHandler;
-	Socket socket;
+	private GamePanel gamePanel;
+	private KeyHandler keyHandler;
+	private Socket socket;
+	private ObjectOutputStream objectOutputStream;
 	
-	static PlayerInfo playerInfo;
-	ObjectOutputStream objectOutputStream;
-	int idUpperBound = 2048;
+	private static PlayerInfo playerInfo;
 	
-	String filename = "players/ARSEN_SPRITESHEET";
-	int originalTileSize;
-	int tileSize;
+	private String playerSkinFileName = "players/ARSEN_SPRITESHEET";
+	private int originalTileSize;
+	private int tileSize;
 	
 	//testing animation
-	int epsilon;
-	int animState;
-	int animLeftOrRight;
-	BufferedImage[] spriteArray;
-	Random rand = new Random();
+	private int epsilon;
+	private int animState;
+	private int animLeftOrRight;
 	
-	int screenX;
-	int screenY;
+	public BufferedImage[] spriteArray;
+	Random rand = new Random();
+
+	public int screenX;
+	public int screenY;
 	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
 		this.socket = socket;
-		this.originalTileSize = gamePanel.getOriginalTileSize();
-		this.tileSize = gamePanel.getTileSize();
-		this.screenY = gamePanel.getScreenWidth() / 2 - (gamePanel.getTileSize() / 2);
-		this.screenX = gamePanel.getScreenHeight() / 2 - (gamePanel.getTileSize() / 2);
-		this.collisionBox = new Rectangle();
+		this.originalTileSize = gamePanel.originalTileSize;
+		this.tileSize = gamePanel.tileSize;
+		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
+		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			playerInfo = new PlayerInfo(rand.nextInt(idUpperBound), worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(filename), "PNG"));
+			
+			//for now, unique identifier for each player is a random int of upper bound 2048
+			playerInfo = new PlayerInfo(rand.nextInt(2048), worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
+			
 			//sends initial location
 			objectOutputStream.writeUnshared(playerInfo);
 			objectOutputStream.flush();
 			
 			//playerInfo.setSpritesheet(null);
-			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(filename), 4, 4, originalTileSize);			
+			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);			
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -71,12 +73,12 @@ public class Player extends Entity{
 		direction = "down";
 		
 		//collision
-		collisionBox.x = 8;
-		collisionBox.y = 16;
-		collisionBox.height = 32;
-		collisionBox.width = 32;
+		collisionBox = new Rectangle();
+		collisionBox.x = 4 * gamePanel.scale;
+		collisionBox.y = 6 * gamePanel.scale;
+		collisionBox.height = 8 * gamePanel.scale;
+		collisionBox.width = 8 * gamePanel.scale;
 		
-
 	}
 	
 	public void update() {
@@ -86,6 +88,7 @@ public class Player extends Entity{
 			else if(keyHandler.downPressed) direction = "down"; 
 			else if(keyHandler.leftPressed) direction = "left"; 
 			else if(keyHandler.rightPressed) direction = "right"; 
+			
 			++epsilon;
 			if(epsilon > 10) {
 				if(animState == 0) { animState = 1; }
@@ -126,10 +129,9 @@ public class Player extends Entity{
 			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+
 	}
 	
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
-	public int getScreenX() { return screenX; }
-	public int getScreenY() { return screenY; }
 }

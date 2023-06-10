@@ -4,9 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
+import entity.Player;
 import main.GamePanel;
 
 public class GraphicsUtil {
@@ -48,11 +48,13 @@ public class GraphicsUtil {
 	}
 	
 	public static boolean isInViewport(GamePanel gamePanel, int absX, int absY) {
-		int playerX = gamePanel.getPlayer().getWorldX();
-		int playerY = gamePanel.getPlayer().getWorldY();
-		int screenX = gamePanel.getPlayer().getScreenX();
-		int screenY = gamePanel.getPlayer().getScreenY();
-		int tileSize = gamePanel.getTileSize();
+		Player player = gamePanel.player;
+		int tileSize = gamePanel.tileSize;
+		int playerX = player.getWorldX(); 
+		int playerY = player.getWorldY();
+		int screenX = player.screenX; 
+		int screenY = player.screenY;
+		
 		if(absX + tileSize > playerX - screenX && absX - tileSize < playerX + screenX &&
 		   absY + tileSize > playerY - screenY && absY - tileSize < playerY + screenY) return true;
 		return false;

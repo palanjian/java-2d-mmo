@@ -8,4 +8,5 @@ public class Entity {
 	public int speed;
 	public String direction;
 	public Rectangle collisionBox;
+	
 }
