@@ -10,17 +10,17 @@ import packets.TileMap;
 public class TileHandler {
 
 	GamePanel gamePanel;
-	TileMap tileMap;
+	private TileMap tileMap;
 	BufferedImage[] sprites;
 	
 	public TileHandler(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;		
-        
         sprites = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(gamePanel.getSpriteSheetFileName()), gamePanel.getSpriteSheetColumns(), gamePanel.getSpriteSheetRows(), gamePanel.getOriginalTileSize());
 	}
 	
 	public void service(TileMap tileMap){
 		this.tileMap = tileMap;
+		GamePanel.temp = tileMap;
 	}
 	
 	public void draw(Graphics2D g2) {

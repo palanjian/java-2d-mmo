@@ -1,11 +1,14 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Random;
+
+import graphics.CollisionUtil;
 import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
@@ -43,6 +46,7 @@ public class Player extends Entity{
 		this.tileSize = gamePanel.getTileSize();
 		this.screenY = gamePanel.getScreenWidth() / 2 - (gamePanel.getTileSize() / 2);
 		this.screenX = gamePanel.getScreenHeight() / 2 - (gamePanel.getTileSize() / 2);
+		this.collisionBox = new Rectangle();
 		try {
 			setDefaultValues();
 			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -65,27 +69,23 @@ public class Player extends Entity{
 		worldY = rand.nextInt(((50*64)/2)-((46*64)/2)) + ((46*64)/2);
 		speed = 4;
 		direction = "down";
+		
+		//collision
+		collisionBox.x = 8;
+		collisionBox.y = 16;
+		collisionBox.height = 32;
+		collisionBox.width = 32;
+		
+
 	}
 	
 	public void update() {
 		if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
 			//if you want diagonal movement to be possible, change else if to simply if
-			if(keyHandler.upPressed) {
-				worldY -= speed;
-				direction = "up";
-			}
-			else if(keyHandler.downPressed) {
-				worldY += speed;
-				direction = "down";
-			}
-			else if(keyHandler.leftPressed) {
-				worldX -= speed;
-				direction = "left";
-			}
-			else if(keyHandler.rightPressed) {
-				worldX += speed;
-				direction = "right";
-			}
+			if(keyHandler.upPressed) direction = "up"; 
+			else if(keyHandler.downPressed) direction = "down"; 
+			else if(keyHandler.leftPressed) direction = "left"; 
+			else if(keyHandler.rightPressed) direction = "right"; 
 			++epsilon;
 			if(epsilon > 10) {
 				if(animState == 0) { animState = 1; }
@@ -93,6 +93,14 @@ public class Player extends Entity{
 				else if(animState == 1 && animLeftOrRight == 0) { animState = 0; animLeftOrRight = 1; }
 				else { animState = 2; animLeftOrRight = 0;}
 				epsilon = 0;
+			}
+			
+			//if canMove is true, player can move
+			if(CollisionUtil.canMove(gamePanel, this)) {
+				if(direction.equals("up")) worldY -= speed;
+				else if(direction.equals("down")) worldY += speed;
+				else if(direction.equals("left")) worldX -= speed;
+				else if(direction.equals("right")) worldX += speed;
 			}
 			
 			playerInfo.updatePosition(worldX, worldY, direction, animState);

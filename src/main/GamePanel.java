@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import entity.Player;
 import graphics.TileHandler;
+import packets.TileMap;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
@@ -28,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable{
 	KeyHandler keyHandler = new KeyHandler();
 	Thread gameThread;
 	RequestsHandler requestsHandler;
-	TileHandler tileHandler;
+	public TileHandler tileHandler;
 	Thread nonPlayerThread;
 	Player player;
 
@@ -40,7 +41,10 @@ public class GamePanel extends JPanel implements Runnable{
 	String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
 	int spriteSheetRows = 40;
 	int spriteSheetColumns = 36;
-			
+	
+	//TEST
+	public static TileMap temp;
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.GRAY);
@@ -54,10 +58,9 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Attempting to connect to server " + host + " on port:" + port);
 			socket = new Socket(host, port);
 			System.out.println("Successfully connected to server.");
-			
-			player = new Player(this, keyHandler, socket);
+			tileHandler = new TileHandler(this);			
 			requestsHandler = new RequestsHandler(socket, this);
-			tileHandler = new TileHandler(this);
+			player = new Player(this, keyHandler, socket);
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
