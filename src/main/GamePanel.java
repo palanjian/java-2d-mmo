@@ -30,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public Thread gameThread;
 	public RequestsHandler requestsHandler;
 	public TileHandler tileHandler;
+	public ChatHandler chatHandler;
 	public Thread nonPlayerThread;
 	public Player player;
 
@@ -58,7 +59,8 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Successfully connected to server.");
 			
 			//Instantiates all handlers
-			tileHandler = new TileHandler(this);			
+			tileHandler = new TileHandler(this);		
+			chatHandler = new ChatHandler(this);
 			requestsHandler = new RequestsHandler(socket, this);
 			player = new Player(this, keyHandler, socket);
 		}
@@ -115,5 +117,4 @@ public class GamePanel extends JPanel implements Runnable{
 	public String getSpriteSheetFileName() { return spriteSheetFileName; }
 	public int getSpriteSheetRows() { return spriteSheetRows; }
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
-	public TileHandler getTileHandler() { return tileHandler; }
 }

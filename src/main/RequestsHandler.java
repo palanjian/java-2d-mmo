@@ -17,11 +17,13 @@ public class RequestsHandler implements Runnable{
 	private ObjectInputStream objectInputStream;
 	private NonPlayerGraphicsHandler nonPlayerGraphicsHandler;
 	private TileHandler tileHandler;
+	private ChatHandler chatHandler;
 	
 	RequestsHandler(Socket socket, GamePanel gamePanel){
 		this.socket = socket;
 		this.gamePanel = gamePanel;
-		this.tileHandler = gamePanel.getTileHandler();
+		this.tileHandler = gamePanel.tileHandler;
+		this.chatHandler = gamePanel.chatHandler;
 		try {
 			objectInputStream = new ObjectInputStream(socket.getInputStream());
 			nonPlayerGraphicsHandler = new NonPlayerGraphicsHandler(gamePanel);
@@ -52,6 +54,7 @@ public class RequestsHandler implements Runnable{
 				//if object is ChatMessage
 				else if(o instanceof ChatMessage) {
 					ChatMessage chatMessage = (ChatMessage)o;
+					chatHandler.service(chatMessage);
 				}
 				
 		        int availableBytes = objectInputStream.available();
@@ -69,5 +72,6 @@ public class RequestsHandler implements Runnable{
 	public void draw(Graphics2D g2) {
 		tileHandler.draw(g2);
 		nonPlayerGraphicsHandler.draw(g2);
+		chatHandler.draw(g2);
 	}
 }
