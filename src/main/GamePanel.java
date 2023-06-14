@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int screenHeight = tileSize * maxScreenRow; //576 pixels
 	public final int FPS = 60;
 	
-	public KeyHandler keyHandler = new KeyHandler();
+	public KeyHandler keyHandler = new KeyHandler(this);
 	
 	public Thread gameThread;
 	public RequestsHandler requestsHandler;
@@ -44,6 +44,11 @@ public class GamePanel extends JPanel implements Runnable{
 	private String fontFileName = "fonts/chatfont";
 	private int spriteSheetRows = 40;
 	private int spriteSheetColumns = 36;
+	
+	//game state
+	private int gameState;
+	public int playState = 0;
+	public int typingState = 1;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -103,7 +108,7 @@ public class GamePanel extends JPanel implements Runnable{
 	}	
 	
 	public void update() {
-		player.update();
+		if(gameState == playState) player.update();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -120,4 +125,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
 	public String getFontFileName() {return fontFileName; }
 	public void setFontFileName(String fontFileName) { this.fontFileName = fontFileName; }
+	public int getGameState() { return gameState; }
+	public void setGameState(int gameState) { this.gameState = gameState;}
+	public Socket getSocket() { return socket; }
 }

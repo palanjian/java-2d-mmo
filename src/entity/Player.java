@@ -12,15 +12,15 @@ import graphics.CollisionUtil;
 import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
+import main.RequestsHandler;
 import packets.PlayerInfo;
 
 public class Player extends Entity{
 	
 	private GamePanel gamePanel;
 	private KeyHandler keyHandler;
-	private Socket socket;
-	private ObjectOutputStream objectOutputStream;
-	
+	private Socket socket;	
+	private RequestsHandler requestsHandler;
 	private static PlayerInfo playerInfo;
 	
 	private String playerSkinFileName = "players/ARSEN_SPRITESHEET";
@@ -42,20 +42,18 @@ public class Player extends Entity{
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
 		this.socket = socket;
+		this.requestsHandler = gamePanel.requestsHandler;
 		this.originalTileSize = gamePanel.originalTileSize;
 		this.tileSize = gamePanel.tileSize;
 		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
 		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
 		try {
-			setDefaultValues();
-			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			
+			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048
 			playerInfo = new PlayerInfo(rand.nextInt(2048), worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
 			
 			//sends initial location
-			objectOutputStream.writeUnshared(playerInfo);
-			objectOutputStream.flush();
+			requestsHandler.sendObject(playerInfo);
 			
 			//playerInfo.setSpritesheet(null);
 			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);			
@@ -107,10 +105,8 @@ public class Player extends Entity{
 			}
 			
 			playerInfo.updatePosition(worldX, worldY, direction, animState);
-			try {
-				objectOutputStream.writeUnshared(playerInfo);
-				objectOutputStream.flush();
-			} catch (IOException e) { e.printStackTrace(); }
+			requestsHandler.sendObject(playerInfo);
+
 		}
 	}
 	
@@ -134,4 +130,6 @@ public class Player extends Entity{
 	
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
+	public PlayerInfo getPlayerInfo() { return playerInfo; }
+
 }

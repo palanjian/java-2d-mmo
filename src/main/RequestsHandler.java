@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.Graphics2D;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import graphics.NonPlayerGraphicsHandler;
@@ -15,6 +17,7 @@ public class RequestsHandler implements Runnable{
 	private Socket socket;
 	private GamePanel gamePanel;
 	private ObjectInputStream objectInputStream;
+	private ObjectOutputStream objectOutputStream;
 	private NonPlayerGraphicsHandler nonPlayerGraphicsHandler;
 	private TileHandler tileHandler;
 	private ChatHandler chatHandler;
@@ -26,6 +29,7 @@ public class RequestsHandler implements Runnable{
 		this.chatHandler = gamePanel.chatHandler;
 		try {
 			objectInputStream = new ObjectInputStream(socket.getInputStream());
+			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			nonPlayerGraphicsHandler = new NonPlayerGraphicsHandler(gamePanel);
 		} catch (Exception e) {
 			System.out.println("Could not initialize input stream. Exiting.");
@@ -68,6 +72,14 @@ public class RequestsHandler implements Runnable{
 			} catch (Exception e) { e.printStackTrace(); }
 		}
 	}
+	
+	public void sendObject(Object o) {
+		try {
+			objectOutputStream.writeUnshared(o);
+			objectOutputStream.flush();
+		} catch (IOException e) { e.printStackTrace(); }
+	}
+	
 	
 	public void draw(Graphics2D g2) {
 		tileHandler.draw(g2);

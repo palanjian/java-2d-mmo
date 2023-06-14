@@ -2,14 +2,29 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.ObjectOutputStream;
 
 public class KeyHandler implements KeyListener {
 	
 	public boolean upPressed, downPressed, leftPressed, rightPressed;
+	private GamePanel gamePanel;
+	private String charStream;
+	
+	public KeyHandler(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
+		this.charStream = "";
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(gamePanel.getGameState() == gamePanel.typingState) {
+			char code = e.getKeyChar();
+			if(code >= 32 && code <= 126) {
+				//if code is between ascii values of space and ~ (no white spaces)
+				charStream += code;
+			}
+			else if(code == KeyEvent.VK_BACK_SPACE) charStream = charStream.substring(0, charStream.length()-1);
+		}
 	}
 
 	@Override
@@ -27,6 +42,20 @@ public class KeyHandler implements KeyListener {
 		}
 		if(code == KeyEvent.VK_D) {
 			rightPressed = true;
+		}
+		if(code == KeyEvent.VK_ENTER) {
+			if(gamePanel.getGameState() == gamePanel.typingState) {
+				gamePanel.chatHandler.sendMessage();
+				gamePanel.setGameState(gamePanel.playState);
+				charStream = "";
+			}
+			else if(gamePanel.getGameState() == gamePanel.playState) gamePanel.setGameState(gamePanel.typingState);
+		}
+		if(code == KeyEvent.VK_ESCAPE) {
+			if(gamePanel.getGameState() == gamePanel.typingState) {
+				gamePanel.setGameState(gamePanel.playState);
+				charStream = "";
+			}
 		}
 	}
 
@@ -47,4 +76,6 @@ public class KeyHandler implements KeyListener {
 		}
 	}
 
+	public String getCharStream() {return charStream; }
+	public void setCharStream(String charStream) { this.charStream = charStream; }
 }
