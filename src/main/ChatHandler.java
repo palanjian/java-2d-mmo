@@ -16,7 +16,8 @@ public class ChatHandler {
 	private ArrayDeque<ChatMessage> messageQueue;
 	
 	private int FONT_SIZE = 16; //px
-	private int MAX_MESSAGES = 8;
+	private int MAX_MESSAGES = 8; //max messages on screen
+	private int MSG_DISPLAY_SECONDS = 20; //how many minutes should each message be displayed for
 	private Font FONT;
 	
 	public ChatHandler(GamePanel gamePanel) {
@@ -34,34 +35,19 @@ public class ChatHandler {
 	}
 
 	public void draw(Graphics2D g2) {
+		g2.setFont(new Font(FONT.getFontName(), Font.PLAIN, FONT_SIZE));
+		g2.setColor(Color.WHITE);
+		
 		int msgNumber = 1;
 		for(ChatMessage msg : messageQueue) {
-			String formatted = "";
-			g2.setFont(new Font(FONT.getFontName(), Font.PLAIN, FONT_SIZE));
-			
-			//make more elegant
-			switch(msg.getRecipient()) {
-			case("all"):
-				formatted += "[Server] " + msg.getMessage();
-				g2.setColor(new Color(209, 85, 80));
-				break;
-			case("world"):
-				formatted += "[World] " + msg.getSender() + ": " + msg.getMessage(); //can change to player.getWorldName() once worlds are implemented
-				g2.setColor(Color.WHITE);
-				break;
-			case("guild"):
-				formatted += "[Guild] " + msg.getSender() + ": " + msg.getMessage();
-				g2.setColor(new Color(37, 127, 39));
-				break;
-			case("whisper"):
-				formatted += "[Whisper] " + msg.getSender() + ": " + msg.getMessage();
-				g2.setColor(new Color(207, 159, 255));;
-				g2.setFont(new Font(FONT.getFontName(), Font.ITALIC, FONT_SIZE));
-				break;
-			}		
-			
-			g2.drawString(formatted, gamePanel.tileSize / 2, gamePanel.screenHeight - (gamePanel.tileSize / 2) - msgNumber*FONT_SIZE);
-			++msgNumber;
+			if(System.currentTimeMillis() - (MSG_DISPLAY_SECONDS * 1000) > msg.getTimeRecieved()) {
+				messageQueue.remove(msg);
+			}
+			else {
+				String formatted = msg.getSender() + ": " + msg.getMessage();
+				g2.drawString(formatted, gamePanel.tileSize / 2, gamePanel.screenHeight - (gamePanel.tileSize / 2) - msgNumber*FONT_SIZE);
+				++msgNumber;	
+			}
 		}
 	}
 	
@@ -69,6 +55,7 @@ public class ChatHandler {
 		if(messageQueue.size() == MAX_MESSAGES) {
 			messageQueue.removeLast();
 		}
+		message.setTimeRecieved(System.currentTimeMillis());
 		messageQueue.addFirst(message);
 	}
 }
