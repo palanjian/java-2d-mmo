@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//sprite sheet information
 	private String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
+	private String fontFileName = "fonts/chatfont";
 	private int spriteSheetRows = 40;
 	private int spriteSheetColumns = 36;
 	
@@ -117,4 +118,6 @@ public class GamePanel extends JPanel implements Runnable{
 	public String getSpriteSheetFileName() { return spriteSheetFileName; }
 	public int getSpriteSheetRows() { return spriteSheetRows; }
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
+	public String getFontFileName() {return fontFileName; }
+	public void setFontFileName(String fontFileName) { this.fontFileName = fontFileName; }
 }
