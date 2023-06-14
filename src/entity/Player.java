@@ -37,7 +37,7 @@ public class Player extends Entity{
 
 	public int screenX;
 	public int screenY;
-	
+		
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
@@ -50,7 +50,7 @@ public class Player extends Entity{
 		try {
 			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048
-			playerInfo = new PlayerInfo(rand.nextInt(2048), worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
+			playerInfo = new PlayerInfo(rand.nextInt(2048), gamePanel.username, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
 			
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
@@ -69,7 +69,6 @@ public class Player extends Entity{
 		worldY = rand.nextInt(((50*64)/2)-((46*64)/2)) + ((46*64)/2);
 		speed = 4;
 		direction = "down";
-		
 		//collision
 		collisionBox = new Rectangle();
 		collisionBox.x = 4 * gamePanel.scale;

@@ -1,8 +1,13 @@
 package graphics;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -17,8 +22,13 @@ public class NonPlayerGraphicsHandler {
 	private Map<Integer, PlayerInfo> allPlayerInfos;
 	private Map<Integer, BufferedImage[]> allPlayerSprites;
 	
+	//reused code from chatHandler, could probably clean up
+	Font FONT;
+	int FONT_SIZE;
 	public NonPlayerGraphicsHandler(GamePanel gamePanel){
 		this.gamePanel = gamePanel;
+		this.FONT = gamePanel.font;
+		this.FONT_SIZE = gamePanel.fontSize;
         allPlayerInfos = new HashMap<>();
         allPlayerSprites = new HashMap<>();
 	}
@@ -64,6 +74,8 @@ public class NonPlayerGraphicsHandler {
 	}
 	
 	public void draw(Graphics2D g2) {
+		g2.setColor(Color.WHITE);
+		
 		for(PlayerInfo p : allPlayerInfos.values()) {
 			BufferedImage[] spriteArray;
 			BufferedImage image;
@@ -91,9 +103,16 @@ public class NonPlayerGraphicsHandler {
 			int worldY = p.getPlayerY();
 			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
 			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY;
+			
 			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
+				//draws username above player
+				Rectangle rect = new Rectangle(screenX, screenY - (gamePanel.tileSize/4), gamePanel.tileSize, 0);
+				GraphicsUtil.drawCenteredString(g2, p.getUsername(), rect, new Font(FONT.getFontName(), Font.PLAIN, FONT_SIZE));
+				
+				//draws player sprite
 				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 			}
+			
 		}
 	}
 }

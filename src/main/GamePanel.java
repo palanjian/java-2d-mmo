@@ -2,9 +2,15 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 
 import javax.swing.JPanel;
 
@@ -33,7 +39,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public ChatHandler chatHandler;
 	public Thread nonPlayerThread;
 	public Player player;
-
+	public String username;
+	
 	//host and port info
 	private static String host = "localhost";
 	private static int port = 4000;
@@ -41,7 +48,6 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//sprite sheet information
 	private String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
-	private String fontFileName = "fonts/chatfont";
 	private int spriteSheetRows = 40;
 	private int spriteSheetColumns = 36;
 	
@@ -50,19 +56,38 @@ public class GamePanel extends JPanel implements Runnable{
 	public int playState = 0;
 	public int typingState = 1;
 	
+	//font settings
+	private String fontFileName = "fonts/chatfont";
+	public int fontSize = 16; //px
+	public Font font;
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.GRAY);
 		this.setDoubleBuffered(true); //all drawing will be done in an offscreen painting buffer	
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);
+		
+		//initializes font
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, new File("res/" + fontFileName + ".ttf"));
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		    ge.registerFont(font);
+		}
+		catch(IOException | FontFormatException e) {
+			System.out.println("Error loading chat font.");
+			System.exit(0);
+		}
+		
 	}
 	
 	public void startGameThread() {
 		try {
 			System.out.println("Attempting to connect to server " + host + " on port:" + port);
 			socket = new Socket(host, port);
-			System.out.println("Successfully connected to server.");
+			System.out.println("Successfully connected to server. Please enter your username:");
+			Scanner scan = new Scanner(System.in);
+			username = scan.nextLine().strip();
 			
 			//Instantiates all handlers
 			tileHandler = new TileHandler(this);		
@@ -123,7 +148,6 @@ public class GamePanel extends JPanel implements Runnable{
 	public String getSpriteSheetFileName() { return spriteSheetFileName; }
 	public int getSpriteSheetRows() { return spriteSheetRows; }
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
-	public String getFontFileName() {return fontFileName; }
 	public void setFontFileName(String fontFileName) { this.fontFileName = fontFileName; }
 	public int getGameState() { return gameState; }
 	public void setGameState(int gameState) { this.gameState = gameState;}

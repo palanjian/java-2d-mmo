@@ -19,7 +19,7 @@ public class KeyHandler implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 		if(gamePanel.getGameState() == gamePanel.typingState) {
 			char code = e.getKeyChar();
-			if(code >= 32 && code <= 126) {
+			if(code >= 32 && code <= 126 && charStream.length() <= 48) {
 				//if code is between ascii values of space and ~ (no white spaces)
 				charStream += code;
 			}
