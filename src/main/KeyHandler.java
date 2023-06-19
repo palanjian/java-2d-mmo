@@ -23,7 +23,7 @@ public class KeyHandler implements KeyListener {
 				//if code is between ascii values of space and ~ (no white spaces)
 				charStream += code;
 			}
-			else if(code == KeyEvent.VK_BACK_SPACE) charStream = charStream.substring(0, charStream.length()-1);
+			else if(code == KeyEvent.VK_BACK_SPACE && charStream.length() > 0) charStream = charStream.substring(0, charStream.length()-1);
 		}
 	}
 

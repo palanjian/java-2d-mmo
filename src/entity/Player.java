@@ -3,8 +3,6 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Random;
 
@@ -23,7 +21,7 @@ public class Player extends Entity{
 	private RequestsHandler requestsHandler;
 	private static PlayerInfo playerInfo;
 	
-	private String playerSkinFileName = "players/ARSEN_SPRITESHEET";
+	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET";
 	private int originalTileSize;
 	private int tileSize;
 	
@@ -47,6 +45,8 @@ public class Player extends Entity{
 		this.tileSize = gamePanel.tileSize;
 		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
 		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
+		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET";
+
 		try {
 			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048

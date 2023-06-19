@@ -11,12 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
-
 import javax.swing.JPanel;
-
 import entity.Player;
 import graphics.TileHandler;
-import packets.TileMap;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
@@ -58,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//font settings
 	private String fontFileName = "fonts/chatfont";
-	public int fontSize = 16; //px
+	public int fontSize = 24; //px
 	public Font font;
 	
 	public GamePanel() {
@@ -88,12 +85,12 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Successfully connected to server. Please enter your username:");
 			Scanner scan = new Scanner(System.in);
 			username = scan.nextLine().strip();
-			
 			//Instantiates all handlers
 			tileHandler = new TileHandler(this);		
 			chatHandler = new ChatHandler(this);
 			requestsHandler = new RequestsHandler(socket, this);
 			player = new Player(this, keyHandler, socket);
+
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());

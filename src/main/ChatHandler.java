@@ -1,10 +1,10 @@
 package main;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayDeque;
-
 import packets.ChatMessage;
 import packets.PlayerInfo;
 
@@ -32,7 +32,6 @@ public class ChatHandler {
 		//drawing the chat words
 		g2.setFont(new Font(FONT.getFontName(), Font.PLAIN, FONT_SIZE));
 		g2.setColor(Color.WHITE);
-		
 		//drawing the player's typed message
 		int msgNumber = 1; // #1 is the chat input field
 		if(gamePanel.getGameState() == gamePanel.typingState) {
@@ -48,7 +47,9 @@ public class ChatHandler {
 			if(System.currentTimeMillis() - (MSG_DISPLAY_SECONDS * 1000) > msg.getTimeRecieved()) {
 				messageQueue.remove(msg);
 			}
+			
 			else {
+				
 				String formatted = msg.getSender() + ": " + msg.getMessage();
 				g2.drawString(formatted, gamePanel.tileSize / 2, gamePanel.screenHeight - (gamePanel.tileSize / 2) - msgNumber*FONT_SIZE);
 				++msgNumber;	
