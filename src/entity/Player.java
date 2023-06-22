@@ -56,7 +56,10 @@ public class Player extends Entity{
 			requestsHandler.sendObject(playerInfo);
 			
 			//playerInfo.setSpritesheet(null);
-			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);			
+			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);
+			
+			//testing PETS
+			Pet chicken = new Pet(gamePanel, this, "chicken");
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
