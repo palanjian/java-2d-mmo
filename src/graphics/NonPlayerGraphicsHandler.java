@@ -76,9 +76,23 @@ public class NonPlayerGraphicsHandler {
 	public void draw(Graphics2D g2) {
 		g2.setColor(Color.WHITE);
 		
+		drawPlayers(g2);
+	}
+	
+	public void drawPlayers(Graphics2D g2) {
 		for(PlayerInfo p : allPlayerInfos.values()) {
 			BufferedImage[] spriteArray;
 			BufferedImage image;
+			
+			//pet stuff
+			BufferedImage[] petSpriteArray = null;
+			boolean hasPet = false;
+			if(p.getPet() != null) {
+				hasPet = true;
+				petSpriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/" + p.getPet() + "_SPRITESHEET"), 4, 4, gamePanel.originalTileSize);
+			}
+			BufferedImage petImage = null;
+			
 			try {
 				spriteArray = allPlayerSprites.get(p.getId());
 				image = spriteArray[0]; //default value
@@ -86,17 +100,37 @@ public class NonPlayerGraphicsHandler {
 			catch(Exception e) {
 				break;
 			}
+			
+			int petX = 0;
+			int petY = 0;
+			
 			if(p.getDirection().equals("down")) {
 				image = spriteArray[0 + p.getAnimState()];
+				if(hasPet) {
+					petImage = petSpriteArray[0 + p.getAnimState()];
+					petY -= gamePanel.tileSize;
+				}
 			}
 			if(p.getDirection().equals("left")) {
 				image = spriteArray[4 + p.getAnimState()];
+				if(hasPet) {
+					petImage = petSpriteArray[4 + p.getAnimState()];
+					petX += gamePanel.tileSize;
+				}
 			}
 			if(p.getDirection().equals("right")) {
 				image = spriteArray[8 + p.getAnimState()];
+				if(hasPet) {
+					petImage = petSpriteArray[8 + p.getAnimState()];
+					petX -= gamePanel.tileSize;
+				}
 			}
 			if(p.getDirection().equals("up")) {
 				image = spriteArray[12 + p.getAnimState()];
+				if(hasPet) {
+					petImage = petSpriteArray[12 + p.getAnimState()];
+					petY += gamePanel.tileSize;
+				}
 			}
 			
 			int worldX = p.getPlayerX();
@@ -111,8 +145,10 @@ public class NonPlayerGraphicsHandler {
 				
 				//draws player sprite
 				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+				
+				//draws pet sprite
+				if(hasPet) g2.drawImage(petImage, screenX + petX, screenY + petY, gamePanel.tileSize, gamePanel.tileSize, null);
 			}
-			
 		}
 	}
 }

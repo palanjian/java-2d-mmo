@@ -52,14 +52,14 @@ public class Player extends Entity{
 			//for now, unique identifier for each player is a random int of upper bound 2048
 			playerInfo = new PlayerInfo(rand.nextInt(2048), gamePanel.username, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
 			
+			playerInfo.setPet("CHICKEN"); // testing pets
+			
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
 			
 			//playerInfo.setSpritesheet(null);
 			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);
 			
-			//testing PETS
-			Pet chicken = new Pet(gamePanel, this, "chicken");
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -127,6 +127,7 @@ public class Player extends Entity{
 			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+		
 
 	}
 	
