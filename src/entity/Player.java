@@ -23,7 +23,7 @@ public class Player extends Entity{
 	
 	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET";
 	private int originalTileSize;
-	private int tileSize;
+	public int tileSize;
 	
 	//testing animation
 	private int epsilon;
@@ -35,7 +35,10 @@ public class Player extends Entity{
 
 	public int screenX;
 	public int screenY;
-		
+	
+	Pet pet = null;
+	private boolean hasPet;
+	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
@@ -45,15 +48,14 @@ public class Player extends Entity{
 		this.tileSize = gamePanel.tileSize;
 		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
 		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
+		this.hasPet = false;
 		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET";
 
 		try {
 			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048
 			playerInfo = new PlayerInfo(rand.nextInt(2048), gamePanel.username, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
-			
-			playerInfo.setPet("CHICKEN"); // testing pets
-			
+						
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
 			
@@ -79,6 +81,7 @@ public class Player extends Entity{
 		collisionBox.height = 8 * gamePanel.scale;
 		collisionBox.width = 8 * gamePanel.scale;
 		
+		pet = new Pet("CHICKEN", this);
 	}
 	
 	public void update() {
@@ -105,8 +108,11 @@ public class Player extends Entity{
 				else if(direction.equals("left")) worldX -= speed;
 				else if(direction.equals("right")) worldX += speed;
 			}
+			pet.update();
 			
 			playerInfo.updatePosition(worldX, worldY, direction, animState);
+			if(hasPet) playerInfo.updatePet(pet.type, pet.worldX, pet.worldY, direction);
+			
 			requestsHandler.sendObject(playerInfo);
 
 		}
@@ -134,5 +140,5 @@ public class Player extends Entity{
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
 	public PlayerInfo getPlayerInfo() { return playerInfo; }
-
+	public void setHasPet(Boolean bool) { hasPet = bool; }
 }

@@ -84,15 +84,6 @@ public class NonPlayerGraphicsHandler {
 			BufferedImage[] spriteArray;
 			BufferedImage image;
 			
-			//pet stuff
-			BufferedImage[] petSpriteArray = null;
-			boolean hasPet = false;
-			if(p.getPet() != null) {
-				hasPet = true;
-				petSpriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/" + p.getPet() + "_SPRITESHEET"), 4, 4, gamePanel.originalTileSize);
-			}
-			BufferedImage petImage = null;
-			
 			try {
 				spriteArray = allPlayerSprites.get(p.getId());
 				image = spriteArray[0]; //default value
@@ -100,43 +91,28 @@ public class NonPlayerGraphicsHandler {
 			catch(Exception e) {
 				break;
 			}
-			
-			int petX = 0;
-			int petY = 0;
-			
-			if(p.getDirection().equals("down")) {
-				image = spriteArray[0 + p.getAnimState()];
-				if(hasPet) {
-					petImage = petSpriteArray[0 + p.getAnimState()];
-					petY -= gamePanel.tileSize;
-				}
-			}
-			if(p.getDirection().equals("left")) {
-				image = spriteArray[4 + p.getAnimState()];
-				if(hasPet) {
-					petImage = petSpriteArray[4 + p.getAnimState()];
-					petX += gamePanel.tileSize;
-				}
-			}
-			if(p.getDirection().equals("right")) {
-				image = spriteArray[8 + p.getAnimState()];
-				if(hasPet) {
-					petImage = petSpriteArray[8 + p.getAnimState()];
-					petX -= gamePanel.tileSize;
-				}
-			}
-			if(p.getDirection().equals("up")) {
-				image = spriteArray[12 + p.getAnimState()];
-				if(hasPet) {
-					petImage = petSpriteArray[12 + p.getAnimState()];
-					petY += gamePanel.tileSize;
-				}
-			}
+			image = spriteArray[getWhichSpriteNumber(p)];
 			
 			int worldX = p.getPlayerX();
 			int worldY = p.getPlayerY();
 			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
 			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY;
+			
+			
+			/* PET LOGIC */
+			BufferedImage[] petSpriteArray = null;
+			boolean hasPet = false;
+			BufferedImage petImage = null;
+			int petScreenX = 0, petScreenY = 0;
+			if(p.getPet() != null) {
+				hasPet = true;
+				petSpriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/" + p.getPet() + "_SPRITESHEET"), 4, 4, gamePanel.originalTileSize);
+				petImage = petSpriteArray[getWhichPetSpriteNumber(p)];
+				petScreenX = p.getPetX() - gamePanel.player.getWorldX() + gamePanel.player.screenX;
+				petScreenY = p.getPetY() - gamePanel.player.getWorldY() + gamePanel.player.screenY;
+			}
+			/* PET LOGIC */
+
 			
 			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
 				//draws username above player
@@ -146,9 +122,40 @@ public class NonPlayerGraphicsHandler {
 				//draws player sprite
 				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 				
-				//draws pet sprite
-				if(hasPet) g2.drawImage(petImage, screenX + petX, screenY + petY, gamePanel.tileSize, gamePanel.tileSize, null);
+				//draws pet if player has
+				if(hasPet) g2.drawImage(petImage, petScreenX, petScreenY, gamePanel.tileSize, gamePanel.tileSize, null);
 			}
 		}
+	}
+	public int getWhichSpriteNumber(PlayerInfo p) {
+		if(p.getDirection().equals("down")) {
+			return 0 + p.getAnimState();
+		}
+		if(p.getDirection().equals("left")) {
+			return 4 + p.getAnimState();
+		}
+		if(p.getDirection().equals("right")) {
+			 return 8 + p.getAnimState();
+		}
+		if(p.getDirection().equals("up")) {
+			return 12 + p.getAnimState();
+		}
+		return 0;
+	}
+	
+	public int getWhichPetSpriteNumber(PlayerInfo p) {
+		if(p.getPetDirection().equals("down")) {
+			return 0 + p.getAnimState();
+		}
+		if(p.getPetDirection().equals("left")) {
+			return 4 + p.getAnimState();
+		}
+		if(p.getPetDirection().equals("right")) {
+			 return 8 + p.getAnimState();
+		}
+		if(p.getPetDirection().equals("up")) {
+			return 12 + p.getAnimState();
+		}
+		return 0;
 	}
 }
