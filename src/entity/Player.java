@@ -21,7 +21,7 @@ public class Player extends Entity{
 	private RequestsHandler requestsHandler;
 	private static PlayerInfo playerInfo;
 	
-	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET";
+	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET_R";
 	private int originalTileSize;
 	public int tileSize;
 	
@@ -49,7 +49,7 @@ public class Player extends Entity{
 		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
 		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
 		this.hasPet = false;
-		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET";
+		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET_R";
 
 		try {
 			setDefaultValues();			
@@ -81,7 +81,7 @@ public class Player extends Entity{
 		collisionBox.height = 8 * gamePanel.scale;
 		collisionBox.width = 8 * gamePanel.scale;
 		
-		pet = new Pet("CHICKEN", this);
+		pet = new Pet("SPARROW", this);
 	}
 	
 	public void update() {

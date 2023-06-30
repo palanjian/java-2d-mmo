@@ -19,8 +19,8 @@ import graphics.TileHandler;
 public class GamePanel extends JPanel implements Runnable{
 	
 	//screen settings
-	public final int originalTileSize = 16; //16x16 tile
-	public final int scale = 4;
+	public final int originalTileSize = 32; //16x16 tile
+	public final int scale = 2;
 	public final int tileSize = originalTileSize * scale; //48x48
 	public final int maxScreenCol = 16;
 	public final int maxScreenRow = 12;
@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private static Socket socket;
 	
 	//sprite sheet information
-	private String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET";
+	private String spriteSheetFileName = "tiles/OVERWORLD_TILESHEET_R";
 	private int spriteSheetRows = 40;
 	private int spriteSheetColumns = 36;
 	
