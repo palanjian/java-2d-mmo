@@ -81,7 +81,7 @@ public class Player extends Entity{
 		collisionBox.height = 8 * gamePanel.scale;
 		collisionBox.width = 8 * gamePanel.scale;
 		
-		pet = new Pet("SPARROW", this);
+		pet = new Pet("DOG", this);
 	}
 	
 	public void update() {

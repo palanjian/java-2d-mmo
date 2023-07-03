@@ -18,9 +18,13 @@ public class Pet extends Entity{
 		if((player.direction.equals("up") || player.direction.equals("down")) && worldX != player.worldX) {
 			if(direction.equals("left"))  worldX -= speed;
 			else if(direction.equals("right"))  worldX += speed;
+			if(direction.equals("up"))  worldY -= speed;
+			else if(direction.equals("down")) worldY += speed;
 			return;
 		}
 		else if((player.direction.equals("left") || player.direction.equals("right")) && worldY != player.worldY) {
+			if(direction.equals("left"))  worldX -= speed;
+			else if(direction.equals("right"))  worldX += speed;
 			if(direction.equals("up"))  worldY -= speed;
 			else if(direction.equals("down")) worldY += speed;
 			return;
