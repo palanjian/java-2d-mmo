@@ -10,6 +10,7 @@ import graphics.CollisionUtil;
 import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
+import entity.Pet;
 import main.RequestsHandler;
 import packets.PlayerInfo;
 
@@ -35,7 +36,9 @@ public class Player extends Entity{
 
 	public int screenX;
 	public int screenY;
-		
+	
+	Pet pet;
+	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		
 		super(gamePanel);
@@ -66,6 +69,8 @@ public class Player extends Entity{
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
+		pet = new Pet(gamePanel, this);
+
 	}
 	
 	public void setDefaultValues() {
@@ -110,6 +115,7 @@ public class Player extends Entity{
 			requestsHandler.sendObject(playerInfo);
 
 		}
+		pet.update();
 	}
 	
 	public void draw(Graphics2D g2) {

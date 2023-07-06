@@ -1,9 +1,11 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import main.GamePanel;
+import npc.Pathfinder;
 import packets.TileMap;
 
 public class TileHandler {
@@ -20,6 +22,7 @@ public class TileHandler {
 	
 	public void service(TileMap tileMap){
 		this.tileMap = tileMap;
+		gamePanel.pathfinder = new Pathfinder(gamePanel);
 	}
 	
 	public void draw(Graphics2D g2) {
@@ -38,6 +41,16 @@ public class TileHandler {
 					}
 				}
 			}
+		}
+		//pathfinding test
+		g2.setColor(Color.red);
+		for(int i=0; i< gamePanel.pathfinder.pathList.size(); i++) {
+			int worldX = gamePanel.pathfinder.pathList.get(i).col * gamePanel.tileSize;
+			int worldY = gamePanel.pathfinder.pathList.get(i).row * gamePanel.tileSize;
+			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
+			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY; 
+			
+			g2.fillRect(screenX, screenY, gamePanel.tileSize, gamePanel.tileSize);
 		}
 	}
 	

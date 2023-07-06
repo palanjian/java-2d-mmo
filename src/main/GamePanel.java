@@ -14,6 +14,7 @@ import java.util.Scanner;
 import javax.swing.JPanel;
 import entity.Player;
 import graphics.TileHandler;
+import npc.Pathfinder;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
@@ -58,6 +59,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public int fontSize = 24; //px
 	public Font font;
 	
+	public Pathfinder pathfinder;
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.GRAY);
@@ -90,7 +93,6 @@ public class GamePanel extends JPanel implements Runnable{
 			chatHandler = new ChatHandler(this);
 			requestsHandler = new RequestsHandler(socket, this);
 			player = new Player(this, keyHandler, socket);
-
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
