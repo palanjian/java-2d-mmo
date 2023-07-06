@@ -98,22 +98,6 @@ public class NonPlayerGraphicsHandler {
 			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
 			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY;
 			
-			
-			/* PET LOGIC */
-			BufferedImage[] petSpriteArray = null;
-			boolean hasPet = false;
-			BufferedImage petImage = null;
-			int petScreenX = 0, petScreenY = 0;
-			if(p.getPet() != null) {
-				hasPet = true;
-				petSpriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/" + p.getPet() + "_SPRITESHEET"), 4, 4, gamePanel.originalTileSize);
-				petImage = petSpriteArray[getWhichPetSpriteNumber(p)];
-				petScreenX = p.getPetX() - gamePanel.player.getWorldX() + gamePanel.player.screenX;
-				petScreenY = p.getPetY() - gamePanel.player.getWorldY() + gamePanel.player.screenY;
-			}
-			/* PET LOGIC */
-
-			
 			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
 				//draws username above player
 				Rectangle rect = new Rectangle(screenX, screenY - (gamePanel.tileSize/4), gamePanel.tileSize, 0);
@@ -122,8 +106,6 @@ public class NonPlayerGraphicsHandler {
 				//draws player sprite
 				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 				
-				//draws pet if player has
-				if(hasPet) g2.drawImage(petImage, petScreenX, petScreenY, gamePanel.tileSize, gamePanel.tileSize, null);
 			}
 		}
 	}
@@ -138,22 +120,6 @@ public class NonPlayerGraphicsHandler {
 			 return 8 + p.getAnimState();
 		}
 		if(p.getDirection().equals("up")) {
-			return 12 + p.getAnimState();
-		}
-		return 0;
-	}
-	
-	public int getWhichPetSpriteNumber(PlayerInfo p) {
-		if(p.getPetDirection().equals("down")) {
-			return 0 + p.getAnimState();
-		}
-		if(p.getPetDirection().equals("left")) {
-			return 4 + p.getAnimState();
-		}
-		if(p.getPetDirection().equals("right")) {
-			 return 8 + p.getAnimState();
-		}
-		if(p.getPetDirection().equals("up")) {
 			return 12 + p.getAnimState();
 		}
 		return 0;

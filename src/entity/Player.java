@@ -35,11 +35,11 @@ public class Player extends Entity{
 
 	public int screenX;
 	public int screenY;
-	
-	Pet pet = null;
-	private boolean hasPet;
-	
+		
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
+		
+		super(gamePanel);
+		
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
 		this.socket = socket;
@@ -48,7 +48,6 @@ public class Player extends Entity{
 		this.tileSize = gamePanel.tileSize;
 		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
 		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
-		this.hasPet = false;
 		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET_R";
 
 		try {
@@ -80,9 +79,7 @@ public class Player extends Entity{
 		collisionBox.y = 6 * gamePanel.scale;
 		collisionBox.height = 8 * gamePanel.scale;
 		collisionBox.width = 8 * gamePanel.scale;
-		
-		pet = new Pet("DOG", this);
-	}
+		}
 	
 	public void update() {
 		if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
@@ -108,11 +105,8 @@ public class Player extends Entity{
 				else if(direction.equals("left")) worldX -= speed;
 				else if(direction.equals("right")) worldX += speed;
 			}
-			pet.update();
 			
 			playerInfo.updatePosition(worldX, worldY, direction, animState);
-			if(hasPet) playerInfo.updatePet(pet.type, pet.worldX, pet.worldY, direction);
-			
 			requestsHandler.sendObject(playerInfo);
 
 		}
@@ -140,5 +134,4 @@ public class Player extends Entity{
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
 	public PlayerInfo getPlayerInfo() { return playerInfo; }
-	public void setHasPet(Boolean bool) { hasPet = bool; }
 }
