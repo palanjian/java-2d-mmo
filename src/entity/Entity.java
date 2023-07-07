@@ -76,7 +76,7 @@ public class Entity {
 				if(!CollisionUtil.canMove(gamePanel, this)) direction = "right";
 			}
 			
-			System.out.println(direction);
+			//System.out.println(direction);
 			
 			if(nextCol == goalCol && nextRow == goalRow) {
 				isFindingPath = false;

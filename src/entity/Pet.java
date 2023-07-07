@@ -23,7 +23,7 @@ public class Pet extends Entity{
 	
 	public void update() {
 		if(isFindingPath) {
-			int goalCol = 12; 
+			int goalCol = 20; 
 			int goalRow = 9;
 			
 			searchPath(goalCol, goalRow);

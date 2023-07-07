@@ -55,9 +55,9 @@ public class Pathfinder {
 		goalNode = node[goalCol][goalRow];
 		openList.add(currentNode);
 		
-		for(int col = 0; col < tileMap.getColumns(); ++col) {
-			for(int row = 0; row < tileMap.getRows(); ++row) {
-				boolean existsCollision = tileMap.getCollisionMap()[col][row];
+		for(int row = 0; row < tileMap.getRows(); ++row) {
+			for(int col = 0; col < tileMap.getColumns(); ++col) {
+				boolean existsCollision = tileMap.getCollisionMap()[row][col];
 				if(existsCollision) {
 					node[col][row].solid = true;
 				}
