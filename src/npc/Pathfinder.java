@@ -8,7 +8,7 @@ import packets.TileMap;
 
 public class Pathfinder {
 	GamePanel gamePanel;
-	Node[][] node;
+	Node[][] nodes;
 	ArrayList<Node> openList = new ArrayList<>();
 	public ArrayList<Node> pathList = new ArrayList<>();
 	Node startNode, goalNode, currentNode;
@@ -26,19 +26,19 @@ public class Pathfinder {
 	
 	public void instantiateNodes() {
 		tileMap = tileHandler.getTileMap();
-		node = new Node[tileMap.getColumns()][tileMap.getRows()];
+		nodes = new Node[tileMap.getColumns()][tileMap.getRows()];
 		for(int col = 0; col < tileMap.getColumns(); ++col) {
 			for(int row = 0; row < tileMap.getRows(); ++row) {
-				node[col][row] = new Node(col, row);
+				nodes[col][row] = new Node(col, row);
 			}
 		}
 	}
 	public void resetNodes() {
 		for(int col = 0; col < tileMap.getColumns(); ++col) {
 			for(int row = 0; row < tileMap.getRows(); ++row) {
-				node[col][row].open = false;
-				node[col][row].checked = false;
-				node[col][row].solid = false;
+				nodes[col][row].open = false;
+				nodes[col][row].checked = false;
+				nodes[col][row].solid = false;
 			}
 		}
 		openList.clear();
@@ -50,18 +50,18 @@ public class Pathfinder {
 	public void setNodes(int startCol, int startRow, int goalCol, int goalRow) {
 		resetNodes();
 		
-		startNode = node[startCol][startRow];
+		startNode = nodes[startCol][startRow];
 		currentNode = startNode;
-		goalNode = node[goalCol][goalRow];
+		goalNode = nodes[goalCol][goalRow];
 		openList.add(currentNode);
 		
 		for(int row = 0; row < tileMap.getRows(); ++row) {
 			for(int col = 0; col < tileMap.getColumns(); ++col) {
 				boolean existsCollision = tileMap.getCollisionMap()[row][col];
 				if(existsCollision) {
-					node[col][row].solid = true;
+					nodes[col][row].solid = true;
 				}
-				getCost(node[col][row]);
+				getCost(nodes[col][row]);
 			}
 		}
 	}
@@ -90,19 +90,19 @@ public class Pathfinder {
 			
 			//open the "up" node
 			if(row - 1 >= 0) {
-				openNode(node[col][row-1]);
+				openNode(nodes[col][row-1]);
 			}
 			//open the "left" node
 			if(col - 1 >= 0) {
-				openNode(node[col-1][row]);
+				openNode(nodes[col-1][row]);
 			}
 			//open the "down" node
 			if(row + 1 >= 0) {
-				openNode(node[col][row+1]);
+				openNode(nodes[col][row+1]);
 			}
 			//open the "right" node
 			if(col + 1 >= 0) {
-				openNode(node[col+1][row]);
+				openNode(nodes[col+1][row]);
 			}
 			//find the best node
 			int bestNodeIndex = 0;

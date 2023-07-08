@@ -22,7 +22,7 @@ public class Player extends Entity{
 	private RequestsHandler requestsHandler;
 	private static PlayerInfo playerInfo;
 	
-	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET_R";
+	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET";
 	private int originalTileSize;
 	public int tileSize;
 	
@@ -133,8 +133,7 @@ public class Player extends Entity{
 			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
-		
-
+		pet.draw(g2); //temporary
 	}
 	
 	public int getWorldX() { return worldX; }
