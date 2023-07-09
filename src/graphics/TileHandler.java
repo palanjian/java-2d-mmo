@@ -42,7 +42,9 @@ public class TileHandler {
 				}
 			}
 		}
+		
 		//pathfinding test
+		/*
 		g2.setColor(Color.red);
 		for(int i=0; i< gamePanel.pathfinder.pathList.size(); i++) {
 			int worldX = gamePanel.pathfinder.pathList.get(i).col * gamePanel.tileSize;
@@ -51,7 +53,7 @@ public class TileHandler {
 			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY; 
 			
 			g2.fillRect(screenX, screenY, gamePanel.tileSize, gamePanel.tileSize);
-		}
+		} */
 	}
 	
 	//Getters & Setters

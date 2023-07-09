@@ -17,9 +17,10 @@ public class Entity {
 	public Rectangle collisionBox;
 	
 	private int epsilon = 0;
-	private int animState = 0;
+	protected int animState = 0;
 	private int animLeftOrRight = 0;
 	public void service() { }
+	public boolean moveCondition() { return true; };
 	boolean isFindingPath;
 	public BufferedImage[] spriteArray;
 
@@ -30,41 +31,25 @@ public class Entity {
 	public void update() {
 		service();
 		
-		++epsilon;
-		if(epsilon > 10) {
-			if(animState == 0) { animState = 1; }
-			else if(animState == 2) { animState = 1; }
-			else if(animState == 1 && animLeftOrRight == 0) { animState = 0; animLeftOrRight = 1; }
-			else { animState = 2; animLeftOrRight = 0;}
-			epsilon = 0;
-		}
-		
-		if(CollisionUtil.canMove(gamePanel, this)) {
+		if(moveCondition()) {
 			if(direction.equals("up")) worldY -= speed;
 			else if(direction.equals("down")) worldY += speed;
 			else if(direction.equals("left")) worldX -= speed;
 			else if(direction.equals("right")) worldX += speed;
+			
+			++epsilon;
+			if(epsilon > 10) {
+				if(animState == 0) { animState = 1; }
+				else if(animState == 2) { animState = 1; }
+				else if(animState == 1 && animLeftOrRight == 0) { animState = 0; animLeftOrRight = 1; }
+				else { animState = 2; animLeftOrRight = 0;}
+				epsilon = 0;
+			}
 		}
 	}
 	
-	public void draw(Graphics2D g2) {
-		BufferedImage image = null;
-		if(direction.equals("down")) {
-			image = spriteArray[0 + animState];
-		}
-		if(direction.equals("left")) {
-			image = spriteArray[4 + animState];
-		}
-		if(direction.equals("right")) {
-			image = spriteArray[8 + animState];
-		}
-		if(direction.equals("up")) {
-			image = spriteArray[12 + animState];
-		}
 
-		int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
-		int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY; 
-		g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+	public void draw(Graphics2D g2) {
 	}
 	
 	public void searchPath(int goalCol, int goalRow) {

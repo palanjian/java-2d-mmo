@@ -97,11 +97,11 @@ public class Pathfinder {
 				openNode(nodes[col-1][row]);
 			}
 			//open the "down" node
-			if(row + 1 >= 0) {
+			if(row + 1 < tileMap.getRows()) {
 				openNode(nodes[col][row+1]);
 			}
 			//open the "right" node
-			if(col + 1 >= 0) {
+			if(col + 1 < tileMap.getColumns()) {
 				openNode(nodes[col+1][row]);
 			}
 			//find the best node

@@ -139,4 +139,5 @@ public class Player extends Entity{
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
 	public PlayerInfo getPlayerInfo() { return playerInfo; }
+
 }
