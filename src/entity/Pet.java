@@ -20,7 +20,7 @@ public class Pet extends Entity{
 		speed = 4;
 		worldX = player.worldX;
 		worldY = player.worldY;
-		collisionBox = new Rectangle(4 * gamePanel.scale, 6 * gamePanel.scale, 8 * gamePanel.scale, 48);
+		collisionBox = player.collisionBox;
 		
 		isFindingPath = true;
 		spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/DOG_SPRITESHEET"), 4, 4, gamePanel.originalTileSize); // testing w solely chicken
@@ -37,13 +37,12 @@ public class Pet extends Entity{
 
 	@Override
 	public boolean moveCondition() {
-		switch(player.direction) {
-		case "up":
-		case "down":
-		case "left":
-		case "right":
-		}
-		if(Math.abs(worldX - player.worldX) <= gamePanel.tileSize && Math.abs(worldY - player.worldY) <= gamePanel.tileSize) return false;
+
+		//fix this
+		Rectangle petCollisionBox = new Rectangle(worldX + collisionBox.x, worldY + collisionBox.y, collisionBox.height, collisionBox.width);
+		Rectangle playerCollisionBox = new Rectangle(player.worldX + player.collisionBox.x, player.worldY + player.collisionBox.y, player.collisionBox.height, player.collisionBox.width);
+
+		if(petCollisionBox.intersects(playerCollisionBox)) return false;
 		return true;
 	}
 	

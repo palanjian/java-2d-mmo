@@ -37,7 +37,7 @@ public class Player extends Entity{
 	public int screenX;
 	public int screenY;
 	
-	Pet pet;
+	public Pet pet;
 	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
 		
@@ -119,6 +119,7 @@ public class Player extends Entity{
 	}
 	
 	public void draw(Graphics2D g2) {
+		pet.draw(g2); //temporary
 		BufferedImage image = null;
 		if(direction.equals("down")) {
 			image = spriteArray[0 + animState];
@@ -133,7 +134,6 @@ public class Player extends Entity{
 			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
-		pet.draw(g2); //temporary
 	}
 	
 	public int getWorldX() { return worldX; }

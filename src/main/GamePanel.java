@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import javax.swing.JPanel;
 import entity.Player;
+import graphics.Debugger;
 import graphics.TileHandler;
 import npc.Pathfinder;
 
@@ -141,6 +142,11 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		requestsHandler.draw(g2);
 		player.draw(g2);
+		
+		//temp
+		Debugger.draw(g2, this);
+		//temp
+		
 		g2.dispose();
 	}
 	
