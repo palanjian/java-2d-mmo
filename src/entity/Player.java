@@ -51,7 +51,7 @@ public class Player extends Entity{
 		this.tileSize = gamePanel.tileSize;
 		this.screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2); 
 		this.screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2); 
-		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET_R";
+		if(gamePanel.username.toLowerCase().equals("arsen")) playerSkinFileName = "players/ARSEN_SPRITESHEET";
 
 		try {
 			setDefaultValues();			

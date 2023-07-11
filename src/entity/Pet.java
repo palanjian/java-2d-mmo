@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import graphics.CollisionUtil;
 import graphics.GraphicsUtil;
 import main.GamePanel;
 
@@ -18,12 +17,12 @@ public class Pet extends Entity{
 		
 		direction = player.direction;
 		speed = 4;
-		worldX = player.worldX;
+		worldX = player.worldX + gamePanel.tileSize;
 		worldY = player.worldY;
-		collisionBox = player.collisionBox;
+		collisionBox = new Rectangle(player.collisionBox.x + 8, player.collisionBox.y + 8, player.collisionBox.height + 8, player.collisionBox.width + 8);
 		
 		isFindingPath = true;
-		spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/DOG_SPRITESHEET"), 4, 4, gamePanel.originalTileSize); // testing w solely chicken
+		spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/CHICKEN_SPRITESHEET"), 4, 4, gamePanel.originalTileSize); // testing w solely chicken
 	}
 	
 	public void service() {
@@ -32,17 +31,13 @@ public class Pet extends Entity{
 			int goalRow = (player.worldY + player.collisionBox.y) / gamePanel.tileSize;
 			
 			searchPath(goalCol, goalRow);
+		
 		}
 	}
 
 	@Override
 	public boolean moveCondition() {
-
-		//fix this
-		Rectangle petCollisionBox = new Rectangle(worldX + collisionBox.x, worldY + collisionBox.y, collisionBox.height, collisionBox.width);
-		Rectangle playerCollisionBox = new Rectangle(player.worldX + player.collisionBox.x, player.worldY + player.collisionBox.y, player.collisionBox.height, player.collisionBox.width);
-
-		if(petCollisionBox.intersects(playerCollisionBox)) return false;
+		if(Math.abs(worldX - player.worldX) <= gamePanel.tileSize && Math.abs(worldY - player.worldY) <= gamePanel.tileSize) return false;
 		return true;
 	}
 	
@@ -57,7 +52,7 @@ public class Pet extends Entity{
 		
 		if(player.worldX <= worldX) {
 			//direction is right
-			image = spriteArray[8 + animState];
+			image = spriteArray[4 + animState];
 		}
 
 		int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;

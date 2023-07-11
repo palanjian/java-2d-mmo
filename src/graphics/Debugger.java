@@ -15,9 +15,9 @@ public class Debugger {
 
 	public static void draw(Graphics2D g2, GamePanel gp) {
 		gamePanel = gp;
-		drawPathfinding(g2);
-		drawHitboxes(g2, gamePanel.player, Color.green);
-		drawHitboxes(g2, gamePanel.player.pet, Color.blue);
+		//drawPathfinding(g2);
+		//drawHitboxes(g2, gamePanel.player, Color.green);
+		//drawHitboxes(g2, gamePanel.player.pet, Color.blue);
 	}
 	
 	public static void drawPathfinding(Graphics2D g2) {
