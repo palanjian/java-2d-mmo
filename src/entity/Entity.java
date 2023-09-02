@@ -57,6 +57,8 @@ public class Entity {
 		int startRow = (worldY + collisionBox.y)/gamePanel.tileSize;
 		
 		Pathfinder pathfinder = gamePanel.pathfinder;
+		if(pathfinder == null) return; //quick fix to pathFinder not being extantiated before tilemap
+									   //is sent from server, causing Null error
 		pathfinder.setNodes(startCol, startRow, goalCol, goalRow);
 		
 		if(pathfinder.search() == true) {
