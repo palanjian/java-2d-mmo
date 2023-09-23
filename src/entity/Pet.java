@@ -22,7 +22,7 @@ public class Pet extends Entity{
 		collisionBox = new Rectangle(player.collisionBox.x + 8, player.collisionBox.y + 8, player.collisionBox.height + 8, player.collisionBox.width + 8);
 		
 		isFindingPath = true;
-		spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/CHICKEN_SPRITESHEET"), 4, 4, gamePanel.originalTileSize); // testing w solely chicken
+		spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage("entities/SNOWMAN_SPRITESHEET"), 4, 4, gamePanel.originalTileSize); // testing w solely chicken
 	}
 	
 	public void service() {
