@@ -78,7 +78,7 @@ public class NonPlayerGraphicsHandler {
 		
 		drawPlayers(g2);
 	}
-	
+
 	public void drawPlayers(Graphics2D g2) {
 		for(PlayerInfo p : allPlayerInfos.values()) {
 			BufferedImage[] spriteArray;
@@ -109,6 +109,7 @@ public class NonPlayerGraphicsHandler {
 			}
 		}
 	}
+	
 	public int getWhichSpriteNumber(PlayerInfo p) {
 		if(p.getDirection().equals("down")) {
 			return 0 + p.getAnimState();

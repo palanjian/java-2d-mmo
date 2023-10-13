@@ -5,9 +5,17 @@ import javax.swing.JFrame;
 public class Main {
 	
 	static JFrame window;
+	static GamePanel gamePanel;
 	
 	public static void main(String[] args) {
-		
+		new Main();
+	}
+	
+	public Main() {
+		setupGame();
+	}	
+	
+	public void setupGame() {
 		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
@@ -17,11 +25,11 @@ public class Main {
 		window.add(gamePanel);
 		
 		window.pack();
-		
 		window.setLocationRelativeTo(null);
 		
-		gamePanel.startGameThread(); 
+		gamePanel.startGameThread(); 	
 	}
+	
 	public static void setVisible() {
 		window.setVisible(true);
 	}

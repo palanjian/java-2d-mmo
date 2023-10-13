@@ -57,7 +57,7 @@ public class Entity {
 		int startRow = (worldY + collisionBox.y)/gamePanel.tileSize;
 		
 		Pathfinder pathfinder = gamePanel.pathfinder;
-		if(pathfinder == null) return; //quick fix to pathFinder not being extantiated before tilemap
+		if(pathfinder == null) return; //quick fix to pathFinder not being instantiated before tilemap
 									   //is sent from server, causing Null error
 		pathfinder.setNodes(startCol, startRow, goalCol, goalRow);
 		
@@ -105,14 +105,6 @@ public class Entity {
 				direction = "down";
 				if(!CollisionUtil.canMove(gamePanel, this)) direction = "right";
 			}
-			
-			//System.out.println(direction);
-			/*
-			int nextCol = gamePanel.pathfinder.pathList.get(0).col;
-			int nextRow = gamePanel.pathfinder.pathList.get(0).row;
-			if(nextCol == goalCol && nextRow == goalRow) {
-				isFindingPath = false;
-			} */
 		}
 	}
 }

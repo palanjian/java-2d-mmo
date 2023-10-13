@@ -3,14 +3,11 @@ package entity;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.net.Socket;
 import java.util.Random;
-
 import graphics.CollisionUtil;
 import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
-import entity.Pet;
 import main.RequestsHandler;
 import packets.PlayerInfo;
 
@@ -18,7 +15,6 @@ public class Player extends Entity{
 	
 	private GamePanel gamePanel;
 	private KeyHandler keyHandler;
-	private Socket socket;	
 	private RequestsHandler requestsHandler;
 	private static PlayerInfo playerInfo;
 	
@@ -37,15 +33,14 @@ public class Player extends Entity{
 	public int screenX;
 	public int screenY;
 	
-	public Pet pet;
+	public Entity pet;
 	
-	public Player(GamePanel gamePanel, KeyHandler keyHandler, Socket socket) {
+	public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 		
 		super(gamePanel);
 		
 		this.gamePanel = gamePanel;
 		this.keyHandler = keyHandler;
-		this.socket = socket;
 		this.requestsHandler = gamePanel.requestsHandler;
 		this.originalTileSize = gamePanel.originalTileSize;
 		this.tileSize = gamePanel.tileSize;

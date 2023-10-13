@@ -93,7 +93,7 @@ public class GamePanel extends JPanel implements Runnable{
 			tileHandler = new TileHandler(this);		
 			chatHandler = new ChatHandler(this);
 			requestsHandler = new RequestsHandler(socket, this);
-			player = new Player(this, keyHandler, socket);
+			player = new Player(this, keyHandler);
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
