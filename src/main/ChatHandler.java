@@ -34,7 +34,7 @@ public class ChatHandler {
 		g2.setColor(Color.WHITE);
 		//drawing the player's typed message
 		int msgNumber = 1; // #1 is the chat input field
-		if(gamePanel.getGameState() == gamePanel.typingState) {
+		if(gamePanel.getGameState() == GameState.Typing) {
 			g2.drawString("> " + keyHandler.getCharStream() + "|", gamePanel.tileSize / 2, gamePanel.screenHeight - (gamePanel.tileSize / 2) - msgNumber*FONT_SIZE);
 			++msgNumber;
 		}
