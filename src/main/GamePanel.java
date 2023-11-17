@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 import javax.swing.JPanel;
+
+import audio.AudioHandler;
 import entity.Player;
 import graphics.Debugger;
 import graphics.TileHandler;
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public RequestsHandler requestsHandler;
 	public TileHandler tileHandler;
 	public ChatHandler chatHandler;
+	public AudioHandler audioHandler;
 	public Thread nonPlayerThread;
 	public Player player;
 	public String username;
@@ -79,12 +82,11 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Error loading chat font.");
 			System.exit(0);
 		}
-		
 	}
 	
 	public void startGameThread() {
 		try {
-			System.out.println("Attempting to connect to server " + host + " on port:" + port);
+			System.out.println("Attempting to connect to server " + host + " on port: " + port);
 			socket = new Socket(host, port);
 			System.out.println("Successfully connected to server. Please enter your username:");
 			Scanner scan = new Scanner(System.in);
@@ -94,6 +96,10 @@ public class GamePanel extends JPanel implements Runnable{
 			chatHandler = new ChatHandler(this);
 			requestsHandler = new RequestsHandler(socket, this);
 			player = new Player(this, keyHandler);
+
+			//begins playing music
+			audioHandler = new AudioHandler();
+			playMusic("track1");
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -149,7 +155,14 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		g2.dispose();
 	}
-	
+	//music test
+	public void playMusic(String track){
+		audioHandler.setFile(track);
+		audioHandler.play();
+		audioHandler.loop();
+	}
+
+
 	public String getSpriteSheetFileName() { return spriteSheetFileName; }
 	public int getSpriteSheetRows() { return spriteSheetRows; }
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
