@@ -53,17 +53,15 @@ public class GamePanel extends JPanel implements Runnable{
 	private int spriteSheetRows = 40;
 	private int spriteSheetColumns = 36;
 	
-	//game state
-	private int gameState;
-	public int playState = 0;
-	public int typingState = 1;
-	
 	//font settings
 	private String fontFileName = "fonts/chatfont";
 	public int fontSize = 24; //px
 	public Font font;
 	
 	public Pathfinder pathfinder;
+	
+	//game state
+	GameState gameState = GameState.Playing;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -139,7 +137,7 @@ public class GamePanel extends JPanel implements Runnable{
 	}	
 	
 	public void update() {
-		if(gameState == playState) player.update();
+		player.update();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -167,7 +165,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public int getSpriteSheetRows() { return spriteSheetRows; }
 	public int getSpriteSheetColumns() { return spriteSheetColumns; }
 	public void setFontFileName(String fontFileName) { this.fontFileName = fontFileName; }
-	public int getGameState() { return gameState; }
-	public void setGameState(int gameState) { this.gameState = gameState;}
+	public GameState getGameState() { return gameState; }
+	public void setGameState(GameState gameState) { this.gameState = gameState;}
 	public Socket getSocket() { return socket; }
 }
