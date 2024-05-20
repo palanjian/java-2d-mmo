@@ -11,7 +11,7 @@ import npc.Pathfinder;
 
 import static enums.Direction.*;
 
-public class Entity {
+public abstract class Entity {
 	
 	public GamePanel gamePanel;
 	public int worldX, worldY;
@@ -24,19 +24,17 @@ public class Entity {
 	protected int animLeftOrRight = 0;
 	public void service() { }
 	public boolean moveCondition() { return true; };
-	boolean isFindingPath;
 	public BufferedImage[] spriteArray;
 
 	public Entity(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 	}
 	
-	public void update() {
-	}
-	
+	public abstract void update();
 
-	public void draw(Graphics2D g2) {
-	}
+	public abstract int getSpriteNumber();
+
+	public abstract void draw(Graphics2D g2);
 	
 	public void searchPath(int goalCol, int goalRow) {
 		int startCol = (worldX + collisionBox.x)/gamePanel.tileSize;

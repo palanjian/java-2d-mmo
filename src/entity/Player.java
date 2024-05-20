@@ -110,7 +110,7 @@ public class Player extends Entity{
 				else if(direction == RIGHT) worldX += speed;
 			}
 			
-			playerInfo.updatePosition(worldX, worldY, direction, animState);
+			playerInfo.updatePosition(worldX, worldY, direction, getSpriteNumber());
 			requestsHandler.sendObject(playerInfo);
 
 		}
@@ -118,6 +118,8 @@ public class Player extends Entity{
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
+
+		image = spriteArray[getSpriteNumber()];
 		if(direction == DOWN) {
 			image = spriteArray[0 + animState];
 		}
@@ -131,6 +133,15 @@ public class Player extends Entity{
 			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+	}
+
+	public int getSpriteNumber(){
+		int spriteNumber = 0;
+		if(direction == DOWN) spriteNumber = 0;
+		if(direction == LEFT) spriteNumber = 4;
+		if(direction == RIGHT) spriteNumber = 8;
+		if(direction == UP) spriteNumber = 12;
+		return spriteNumber + animState;
 	}
 	
 	public int getWorldX() { return worldX; }

@@ -13,25 +13,25 @@ public class EntityInfo implements Serializable{
 	private int entityY;
 	private int id;
 	private Direction direction;
-	private int animState;
+	private int spriteNumber;
 	private byte[] spritesheet;
 	private boolean online;
 
-	public EntityInfo(int id, int entityX, int entityY, Direction direction, int animState, byte[] spritesheet) {
+	public EntityInfo(int id, int entityX, int entityY, Direction direction, int spriteNumber, byte[] spritesheet) {
 		this.id = id;
 		this.entityX = entityX;
 		this.entityY = entityY;
 		this.direction = direction;
 		this.spritesheet = spritesheet;
-		this.setAnimState(animState);
+		this.spriteNumber = spriteNumber;
 		this.online = true;
 	}
 	
-	public void updatePosition(int entityX, int entityY, Direction direction, int animState) {
+	public void updatePosition(int entityX, int entityY, Direction direction, int spriteNumber) {
 		this.entityX = entityX;
 		this.entityY = entityY;
 		this.direction = direction;
-		this.setAnimState(animState);
+		this.spriteNumber = spriteNumber;
 	}
 	//Getters & Setters
 	public int getEntityX() { return entityX; }
@@ -58,8 +58,8 @@ public class EntityInfo implements Serializable{
 
 	public void setOnline(boolean online) { this.online = online; }
 	
-	public int getAnimState() { return animState; }
+	public int getSpriteNumber() { return spriteNumber; }
 
-	public void setAnimState(int animState) { this.animState = animState; }
+	public void setSpriteNumber(int spriteNumber) { this.spriteNumber = spriteNumber; }
 
 }

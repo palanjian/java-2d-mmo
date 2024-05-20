@@ -15,7 +15,8 @@ public class Pet extends Entity{
 
 	Player player;
 	private static EntityInfo entityInfo;
-	private String entitySkinFileName = "entities/SNOWMAN_SPRITESHEET";
+	private String entitySkinFileName = "entities/GOOSE_SPRITESHEET";
+	boolean isFindingPath;
 
 	public Pet(GamePanel gamePanel, Player player) {
 		super(gamePanel);
@@ -64,7 +65,8 @@ public class Pet extends Entity{
 				else { animState = 2; animLeftOrRight = 0;}
 				epsilon = 0;
 			}
-			entityInfo.updatePosition(worldX, worldY, direction, animState);
+
+			entityInfo.updatePosition(worldX, worldY, direction, getSpriteNumber());
 			gamePanel.requestsHandler.sendObject(entityInfo);
 		}
 	}
@@ -76,20 +78,19 @@ public class Pet extends Entity{
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
-		
-		
-		if(player.worldX > worldX) {
-			//direction is left
-			image = spriteArray[0 + animState];
-		}
-		
-		if(player.worldX <= worldX) {
-			//direction is right
-			image = spriteArray[4 + animState];
-		}
+
+		image = spriteArray[getSpriteNumber()];
 
 		int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
 		int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY; 
 		g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+	}
+
+	public int getSpriteNumber(){
+		//default direction is left
+		int spriteNumber = 0;
+		//direction is right
+		if(player.worldX <= worldX) spriteNumber = 4;
+		return spriteNumber + animState;
 	}
 }

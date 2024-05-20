@@ -137,7 +137,7 @@ public class NonPlayerGraphicsHandler {
 			catch(Exception e) {
 				break;
 			}
-			image = spriteArray[getWhichSpriteNumber(p)];
+			image = spriteArray[p.getSpriteNumber()];
 			
 			int worldX = p.getPlayerX();
 			int worldY = p.getPlayerY();
@@ -168,7 +168,7 @@ public class NonPlayerGraphicsHandler {
 			catch(Exception e) {
 				break;
 			}
-			image = spriteArray[getWhichSpriteNumber(p)];
+			image = spriteArray[p.getSpriteNumber()];
 
 			int worldX = p.getEntityX();
 			int worldY = p.getEntityY();
@@ -183,23 +183,4 @@ public class NonPlayerGraphicsHandler {
 		}
 	}
 
-	public int getWhichSpriteNumber(PlayerInfo p) {
-		if(p.getDirection() == DOWN) {
-			return 0 + p.getAnimState();
-		}
-		if(p.getDirection() == LEFT) {
-			return 4 + p.getAnimState();
-		}
-		if(p.getDirection() == RIGHT) {
-			 return 8 + p.getAnimState();
-		}
-		if(p.getDirection() == UP) {
-			return 12 + p.getAnimState();
-		}
-		return 0;
-	}
-	public int getWhichSpriteNumber(EntityInfo p) {
-
-		return 0;
-	}
 }

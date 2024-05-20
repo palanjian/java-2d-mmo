@@ -12,27 +12,27 @@ public class PlayerInfo implements Serializable{
 	private int playerY;
 	private int id;
 	private Direction direction;
-	private int animState;
+	private int spriteNumber;
 	private byte[] spritesheet;
 	private boolean online;
 	private String username;
 
-	public PlayerInfo(int id, String username, int playerX, int playerY, Direction direction, int animState, byte[] spritesheet) {
+	public PlayerInfo(int id, String username, int playerX, int playerY, Direction direction, int spriteNumber, byte[] spritesheet) {
 		this.id = id;
 		this.username = username;
 		this.playerX = playerX;
 		this.playerY = playerY;
 		this.direction = direction;
 		this.spritesheet = spritesheet;
-		this.setAnimState(animState);
-		this.setOnline(true);
+		this.spriteNumber = spriteNumber;
+		this.online = true;
 	}
 
-	public void updatePosition(int playerX, int playerY, Direction direction, int animState) {
+	public void updatePosition(int playerX, int playerY, Direction direction, int spriteNumber) {
 		this.playerX = playerX;
 		this.playerY = playerY;
 		this.direction = direction;
-		this.setAnimState(animState);
+		this.spriteNumber = spriteNumber;
 	}
 	//Getters & Setters
 	public int getPlayerX() { return playerX; }
@@ -55,9 +55,9 @@ public class PlayerInfo implements Serializable{
 
 	public void setSpritesheet(byte[] spritesheet) { this.spritesheet = spritesheet; }
 
-	public int getAnimState() { return animState; }
+	public int getSpriteNumber() { return spriteNumber; }
 
-	public void setAnimState(int animState) { this.animState = animState; }
+	public void setSpriteNumber(int spriteNumber) { this.spriteNumber = spriteNumber; }
 
 	public boolean getOnline() { return online; }
 
