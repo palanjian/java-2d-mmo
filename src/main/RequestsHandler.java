@@ -9,6 +9,7 @@ import java.net.SocketException;
 import graphics.NonPlayerGraphicsHandler;
 import graphics.TileHandler;
 import packets.ChatMessage;
+import packets.EntityInfo;
 import packets.PlayerInfo;
 import packets.TileMap;
 
@@ -44,20 +45,19 @@ public class RequestsHandler implements Runnable{
 				Object o = objectInputStream.readObject();
 				
 				//if object is PlayerInfo
-				if (o instanceof PlayerInfo) {
-				    PlayerInfo playerInfo = (PlayerInfo)o;
+				if (o instanceof PlayerInfo playerInfo) {
 				    nonPlayerGraphicsHandler.service(playerInfo);
 				}
-				
+				else if (o instanceof EntityInfo entityInfo) {
+					nonPlayerGraphicsHandler.service(entityInfo);
+				}
 				//if object is TileMap
-				else if(o instanceof TileMap) {
+				else if(o instanceof TileMap tileMap) {
 					System.out.println("Recieved new tilemap.");
-					TileMap tileMap = (TileMap)o; 
 					tileHandler.service(tileMap);
 				}
 				//if object is ChatMessage
-				else if(o instanceof ChatMessage) {
-					ChatMessage chatMessage = (ChatMessage)o;
+				else if(o instanceof ChatMessage chatMessage) {
 					chatHandler.service(chatMessage);
 				}
 				

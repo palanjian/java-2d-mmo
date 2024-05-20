@@ -4,9 +4,8 @@ import javax.swing.JFrame;
 
 public class Main {
 	
-	static JFrame window;
-	static GamePanel gamePanel;
-	
+	private static JFrame window;
+
 	public static void main(String[] args) {
 		new Main();
 	}

@@ -11,6 +11,8 @@ import main.KeyHandler;
 import main.RequestsHandler;
 import packets.PlayerInfo;
 
+import static enums.Direction.*;
+
 public class Player extends Entity{
 	
 	private GamePanel gamePanel;
@@ -34,7 +36,8 @@ public class Player extends Entity{
 	public int screenY;
 	
 	public Entity pet;
-	
+	public int playerId;
+
 	public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 		
 		super(gamePanel);
@@ -51,7 +54,8 @@ public class Player extends Entity{
 		try {
 			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048
-			playerInfo = new PlayerInfo(rand.nextInt(2048), gamePanel.username, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
+			playerId = rand.nextInt(2048);
+			playerInfo = new PlayerInfo(playerId, gamePanel.username, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
 						
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
@@ -72,7 +76,7 @@ public class Player extends Entity{
 		worldX = rand.nextInt(((50*64)/2)-((46*64)/2)) + ((46*64)/2);
 		worldY = rand.nextInt(((50*64)/2)-((46*64)/2)) + ((46*64)/2);
 		speed = 4;
-		direction = "down";
+		direction = DOWN;
 		//collision
 		collisionBox = new Rectangle();
 		collisionBox.x = 4 * gamePanel.scale;
@@ -84,10 +88,10 @@ public class Player extends Entity{
 	public void update() {
 		if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
 			//if you want diagonal movement to be possible, change else if to simply if
-			if(keyHandler.upPressed) direction = "up"; 
-			else if(keyHandler.downPressed) direction = "down"; 
-			else if(keyHandler.leftPressed) direction = "left"; 
-			else if(keyHandler.rightPressed) direction = "right"; 
+			if(keyHandler.upPressed) direction = UP;
+			else if(keyHandler.downPressed) direction = DOWN;
+			else if(keyHandler.leftPressed) direction = LEFT;
+			else if(keyHandler.rightPressed) direction = RIGHT;
 			
 			++epsilon;
 			if(epsilon > 10) {
@@ -100,32 +104,30 @@ public class Player extends Entity{
 			
 			//if canMove is true, player can move
 			if(CollisionUtil.canMove(gamePanel, this)) {
-				if(direction.equals("up")) worldY -= speed;
-				else if(direction.equals("down")) worldY += speed;
-				else if(direction.equals("left")) worldX -= speed;
-				else if(direction.equals("right")) worldX += speed;
+				if(direction == UP) worldY -= speed;
+				else if(direction == DOWN) worldY += speed;
+				else if(direction == LEFT) worldX -= speed;
+				else if(direction == RIGHT) worldX += speed;
 			}
 			
 			playerInfo.updatePosition(worldX, worldY, direction, animState);
 			requestsHandler.sendObject(playerInfo);
 
 		}
-		pet.update();
 	}
 	
 	public void draw(Graphics2D g2) {
-		pet.draw(g2); //temporary
 		BufferedImage image = null;
-		if(direction.equals("down")) {
+		if(direction == DOWN) {
 			image = spriteArray[0 + animState];
 		}
-		if(direction.equals("left")) {
+		if(direction == LEFT) {
 			image = spriteArray[4 + animState];
 		}
-		if(direction.equals("right")) {
+		if(direction == RIGHT) {
 			image = spriteArray[8 + animState];
 		}
-		if(direction.equals("up")) {
+		if(direction == UP) {
 			image = spriteArray[12 + animState];
 		}
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);

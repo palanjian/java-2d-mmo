@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import javax.swing.JPanel;
 import entity.Player;
+import enums.GameState;
 import graphics.Debugger;
 import graphics.TileHandler;
 import npc.Pathfinder;
@@ -28,15 +29,17 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int maxScreenRow = 12;
 	public final int screenWidth = tileSize * maxScreenCol; //768 pixels
 	public final int screenHeight = tileSize * maxScreenRow; //576 pixels
-	public final int FPS = 60;
-	
+
+	//handlers
 	public KeyHandler keyHandler = new KeyHandler(this);
-	
-	public Thread gameThread;
 	public RequestsHandler requestsHandler;
 	public TileHandler tileHandler;
 	public ChatHandler chatHandler;
+
+	public Thread gameThread;
+
 	public Thread nonPlayerThread;
+
 	public Player player;
 	public String username;
 	
@@ -86,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Successfully connected to server. Please enter your username:");
 			Scanner scan = new Scanner(System.in);
 			username = scan.nextLine().strip();
+
 			//Instantiates all handlers
 			tileHandler = new TileHandler(this);		
 			chatHandler = new ChatHandler(this);
@@ -132,6 +136,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 		player.update();
+		player.pet.update();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -140,11 +145,12 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		requestsHandler.draw(g2);
 		player.draw(g2);
-		
+		player.pet.draw(g2); //temporary
+
 		//temp
 		Debugger.draw(g2, this);
 		//temp
-		
+
 		g2.dispose();
 	}
 

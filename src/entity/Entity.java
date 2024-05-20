@@ -4,21 +4,24 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import enums.Direction;
 import graphics.CollisionUtil;
 import main.GamePanel;
 import npc.Pathfinder;
+
+import static enums.Direction.*;
 
 public class Entity {
 	
 	public GamePanel gamePanel;
 	public int worldX, worldY;
 	public int speed;
-	public String direction;
+	public Direction direction;
 	public Rectangle collisionBox;
 	
-	private int epsilon = 0;
+	protected int epsilon = 0;
 	protected int animState = 0;
-	private int animLeftOrRight = 0;
+	protected int animLeftOrRight = 0;
 	public void service() { }
 	public boolean moveCondition() { return true; };
 	boolean isFindingPath;
@@ -29,23 +32,6 @@ public class Entity {
 	}
 	
 	public void update() {
-		service();
-		
-		if(moveCondition()) {
-			if(direction.equals("up")) worldY -= speed;
-			else if(direction.equals("down")) worldY += speed;
-			else if(direction.equals("left")) worldX -= speed;
-			else if(direction.equals("right")) worldX += speed;
-			
-			++epsilon;
-			if(epsilon > 10) {
-				if(animState == 0) { animState = 1; }
-				else if(animState == 2) { animState = 1; }
-				else if(animState == 1 && animLeftOrRight == 0) { animState = 0; animLeftOrRight = 1; }
-				else { animState = 2; animLeftOrRight = 0;}
-				epsilon = 0;
-			}
-		}
 	}
 	
 
@@ -75,35 +61,35 @@ public class Entity {
 			
 			//based on entity's current position, find out the relative direction of the next node
 			if(enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gamePanel.tileSize) {
-				direction = "up";
+				direction = UP;
 			}
 			else if(enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gamePanel.tileSize) {
-				direction = "down";
+				direction = DOWN;
 			}
 			else if(enTopY >= nextY && enBottomY < nextY + gamePanel.tileSize) {
 				//left or right
-				if(enLeftX > nextX) direction = "left";
-				if(enLeftX < nextX) direction = "right";
+				if(enLeftX > nextX) direction = LEFT;
+				if(enLeftX < nextX) direction = RIGHT;
 			}
 			else if(enTopY > nextY && enLeftX > nextX) {
 				//up or left
-				direction = "up";
-				if(!CollisionUtil.canMove(gamePanel, this)) direction = "left";
+				direction = UP;
+				if(!CollisionUtil.canMove(gamePanel, this)) direction = LEFT;
 			}
 			else if(enTopY > nextY && enLeftX < nextX) {
 				//up or right
-				direction = "up";
-				if(!CollisionUtil.canMove(gamePanel, this)) direction = "right";
+				direction = UP;
+				if(!CollisionUtil.canMove(gamePanel, this)) direction = RIGHT;
 			}
 			else if(enTopY < nextY && enLeftX > nextX) {
 				//down or left
-				direction = "down";
-				if(!CollisionUtil.canMove(gamePanel, this)) direction = "left";
+				direction = DOWN;
+				if(!CollisionUtil.canMove(gamePanel, this)) direction = LEFT;
 			}
 			else if(enTopY < nextY && enLeftX < nextX) {
 				//down or right
-				direction = "down";
-				if(!CollisionUtil.canMove(gamePanel, this)) direction = "right";
+				direction = DOWN;
+				if(!CollisionUtil.canMove(gamePanel, this)) direction = RIGHT;
 			}
 		}
 	}

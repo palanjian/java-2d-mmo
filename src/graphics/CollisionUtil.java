@@ -1,8 +1,11 @@
 package graphics;
 
 import entity.Entity;
+import enums.Direction;
 import main.GamePanel;
 import packets.TileMap;
+
+import static enums.Direction.*;
 
 public class CollisionUtil {
 	public static boolean canMove(GamePanel gamePanel, Entity entity) {
@@ -22,25 +25,25 @@ public class CollisionUtil {
 
 		boolean collider1, collider2;
 		
-		if(entity.direction.equals("up")) {
+		if(entity.direction == UP) {
 			entityTopRow = (entityTopWorldY - entity.speed)/tileSize;
 			collider1 = collisionMap[entityTopRow][entityLeftCol];
 			collider2 = collisionMap[entityTopRow][entityRightCol];
 			if(collider1 || collider2) { return false; }
 		}
-		else if(entity.direction.equals("down")){
+		else if(entity.direction == DOWN){
 			entityBottomRow = (entityBottomWorldY + entity.speed)/tileSize;
 			collider1 = collisionMap[entityBottomRow][entityLeftCol];
 			collider2 = collisionMap[entityBottomRow][entityRightCol];
 			if(collider1 || collider2) { return false; }	
 		}
-		else if(entity.direction.equals("left")){
+		else if(entity.direction == LEFT){
 			entityLeftCol = (entityLeftWorldX - entity.speed)/tileSize;
 			collider1 = collisionMap[entityTopRow][entityLeftCol];
 			collider2 = collisionMap[entityBottomRow][entityLeftCol];
 			if(collider1 || collider2) { return false; }
 		}
-		else if(entity.direction.equals("right")){
+		else if(entity.direction == RIGHT){
 			entityRightCol = (entityRightWorldX + entity.speed)/tileSize;
 			collider1 = collisionMap[entityTopRow][entityRightCol];
 			collider2 = collisionMap[entityBottomRow][entityRightCol];

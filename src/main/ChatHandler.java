@@ -1,10 +1,11 @@
 package main;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayDeque;
+
+import enums.GameState;
 import packets.ChatMessage;
 import packets.PlayerInfo;
 
@@ -22,7 +23,8 @@ public class ChatHandler {
 	public ChatHandler(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 		this.keyHandler = gamePanel.keyHandler;
-		this.messageQueue = new ArrayDeque<ChatMessage>();
+		this.messageQueue = new ArrayDeque<>();
+
 		this.FONT = gamePanel.font;
 		this.FONT_SIZE = gamePanel.fontSize;
 
