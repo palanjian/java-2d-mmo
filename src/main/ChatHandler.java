@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 
 import enums.GameState;
 import packets.ChatMessage;
-import packets.PlayerInfo;
+import packets.EntityInfo;
 
 public class ChatHandler {
 	private GamePanel gamePanel;
@@ -36,7 +36,7 @@ public class ChatHandler {
 		g2.setColor(Color.WHITE);
 		//drawing the player's typed message
 		int msgNumber = 1; // #1 is the chat input field
-		if(gamePanel.getGameState() == GameState.Typing) {
+		if(gamePanel.getGameState() == GameState.TYPING) {
 			g2.drawString("> " + keyHandler.getCharStream() + "|", gamePanel.tileSize / 2, gamePanel.screenHeight - (gamePanel.tileSize / 2) - msgNumber*FONT_SIZE);
 			++msgNumber;
 		}
@@ -70,7 +70,7 @@ public class ChatHandler {
 	public void sendMessage() {
 		RequestsHandler requestsHandler = gamePanel.requestsHandler;
 		if(!keyHandler.getCharStream().strip().equals("")) {
-			PlayerInfo playerInfo = gamePanel.player.getPlayerInfo();
+			EntityInfo playerInfo = gamePanel.player.getPlayerInfo();
 			ChatMessage chatMessage = new ChatMessage(keyHandler.getCharStream(), playerInfo.getUsername()); // change to username
 			requestsHandler.sendObject(chatMessage);
 		}

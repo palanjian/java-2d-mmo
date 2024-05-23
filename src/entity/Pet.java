@@ -10,19 +10,20 @@ import packets.EntityInfo;
 
 import static enums.Direction.*;
 import static enums.Direction.RIGHT;
+import static enums.EntityType.PET;
 
 public class Pet extends Entity{
 
 	Player player;
 	private static EntityInfo entityInfo;
-	private String entitySkinFileName = "entities/GOOSE_SPRITESHEET";
+	private String entitySkinFileName = "entities/SNOWMAN_SPRITESHEET";
 	boolean isFindingPath;
 
 	public Pet(GamePanel gamePanel, Player player) {
 		super(gamePanel);
 		
 		this.player = player;
-		
+
 		direction = player.direction;
 		speed = 4;
 		worldX = player.worldX + gamePanel.tileSize;
@@ -32,10 +33,13 @@ public class Pet extends Entity{
 		isFindingPath = true;
 		spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(entitySkinFileName), 4, 4, gamePanel.originalTileSize); // testing w solely chicken
 
-		//entity has same id as it's owner, to identity it
-		entityInfo = new EntityInfo(player.playerId, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(entitySkinFileName), "PNG"));
+		//the pet has the same id as its owner, + 5000. this should be changed later lol
+		entityInfo = new EntityInfo(PET, player.playerId + 5000, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(entitySkinFileName), "PNG"), null);
 		//sends initial info
 		gamePanel.requestsHandler.sendObject(entityInfo);
+
+		//once we send the sprite sheet once, we dont need to keep sending it over. already saved on server/clients
+		entityInfo.setSpritesheet(null);
 	}
 	
 	public void service() {

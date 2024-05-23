@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 public class Main {
 	
 	private static JFrame window;
+	public static GamePanel gp;
 
 	public static void main(String[] args) {
 		new Main();
@@ -20,13 +21,13 @@ public class Main {
 		window.setResizable(false);
 		window.setTitle("Java2DMMO");
 		
-		GamePanel gamePanel = new GamePanel();
-		window.add(gamePanel);
+		gp = new GamePanel();
+		window.add(gp);
 		
 		window.pack();
 		window.setLocationRelativeTo(null);
 		
-		gamePanel.startGameThread(); 	
+		gp.startGameThread();
 	}
 	
 	public static void setVisible() {

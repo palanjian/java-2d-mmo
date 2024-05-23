@@ -8,21 +8,17 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import packets.EntityInfo;
-import packets.PlayerInfo;
-
-import static enums.Direction.*;
 
 public class NonPlayerGraphicsHandler {
 	
 	private GamePanel gamePanel;
-	private Map<Integer, PlayerInfo> allPlayerInfos;
 	private Map<Integer, EntityInfo> allEntityInfos;
-	private Map<Integer, BufferedImage[]> allPlayerSprites;
 	private Map<Integer, BufferedImage[]> allEntitySprites;
 
 
@@ -33,59 +29,28 @@ public class NonPlayerGraphicsHandler {
 		this.gamePanel = gamePanel;
 		this.FONT = gamePanel.font;
 		this.FONT_SIZE = gamePanel.fontSize;
-        allPlayerInfos = new HashMap<>();
-        allPlayerSprites = new HashMap<>();
 
 		allEntityInfos = new HashMap<>();
 		allEntitySprites = new HashMap<>();
 	}
-	
-	public void service(PlayerInfo player) {
-		if(!player.getOnline()) {
-			//when a player disconnects
-			removePlayerInfo(player);
-			removePlayerSprite(player);
-			return;
-		}
-		
-		byte[] spritesheet = player.getSpritesheet();
-		if(spritesheet == null) addPlayerInfo(player);
-		else {
-			addPlayerInfo(player);
-			addPlayerSprite(player);			
-		}
-	}
 
 	public void service(EntityInfo entity) {
-		if(!entity.getOnline()) {
-			//when a player disconnects
+		if (!entity.getOnline()) {
+			// When an entity disconnects
 			removeEntityInfo(entity);
 			removeEntitySprite(entity);
 			return;
 		}
 		byte[] spritesheet = entity.getSpritesheet();
-		if(spritesheet == null) addEntityInfo(entity);
-		else {
-			addEntityInfo(entity);
-			addEntitySprite(entity);
+
+		addEntityInfo(entity);
+		if (spritesheet != null) {
+			addSprite(entity);
 		}
 	}
 
-
-	public void addPlayerInfo(PlayerInfo player) {
-		allPlayerInfos.put(player.getId(), player); //O(1)
-	}
-	
-	public void removePlayerSprite(PlayerInfo player) {
-		allPlayerSprites.remove(player.getId()); //O(1)
-	}
-	public void removePlayerInfo(PlayerInfo player) {
-		allPlayerInfos.remove(player.getId()); //O(1)
-	}
-
-
 	public void addEntityInfo(EntityInfo entity) {
-		allEntityInfos.put(entity.getId(), entity); //O(1)
+		allEntityInfos.put(entity.getId(), entity);
 	}
 	public void removeEntitySprite(EntityInfo entity) {
 		allEntitySprites.remove(entity.getId()); //O(1)
@@ -94,8 +59,9 @@ public class NonPlayerGraphicsHandler {
 		allEntityInfos.remove(entity.getId()); //O(1)
 	}
 
-	public void addPlayerSprite(PlayerInfo player) {
-		byte[] bytes = player.getSpritesheet();
+	public void addSprite(EntityInfo entity) {
+		System.out.println("ADDING");
+		byte[] bytes = entity.getSpritesheet();
         InputStream is = new ByteArrayInputStream(bytes);
         BufferedImage spritesheet = null;
 		try {
@@ -103,82 +69,44 @@ public class NonPlayerGraphicsHandler {
 		} catch (IOException e) { e.printStackTrace(); }
 		
 		BufferedImage[] spriteMap = GraphicsUtil.getSpriteArray(spritesheet, 4, 4, gamePanel.originalTileSize);
-		allPlayerSprites.put(player.getId(), spriteMap);
-	}
-
-	public void addEntitySprite(EntityInfo entity) {
-		byte[] bytes = entity.getSpritesheet();
-		InputStream is = new ByteArrayInputStream(bytes);
-		BufferedImage spritesheet = null;
-		try {
-			spritesheet = ImageIO.read(is);
-		} catch (IOException e) { e.printStackTrace(); }
-
-		BufferedImage[] spriteMap = GraphicsUtil.getSpriteArray(spritesheet, 4, 4, gamePanel.originalTileSize);
 		allEntitySprites.put(entity.getId(), spriteMap);
 	}
+
 
 	public void draw(Graphics2D g2) {
 		g2.setColor(Color.WHITE);
 		
-		drawPlayers(g2);
 		drawEntities(g2);
 	}
 
-	public void drawPlayers(Graphics2D g2) {
-		for(PlayerInfo p : allPlayerInfos.values()) {
+	public void drawEntities(Graphics2D g2) {
+		for(EntityInfo entity : allEntityInfos.values()) {
 			BufferedImage[] spriteArray;
 			BufferedImage image;
 			
 			try {
-				spriteArray = allPlayerSprites.get(p.getId());
+				spriteArray = allEntitySprites.get(entity.getId());
 				image = spriteArray[0]; //default value
 			}
 			catch(Exception e) {
 				break;
 			}
-			image = spriteArray[p.getSpriteNumber()];
+			image = spriteArray[entity.getSpriteNumber()];
 			
-			int worldX = p.getPlayerX();
-			int worldY = p.getPlayerY();
+			int worldX = entity.getWorldX();
+			int worldY = entity.getWorldY();
 			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
 			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY;
 			
 			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
 				//draws username above player
 				Rectangle rect = new Rectangle(screenX, screenY - (gamePanel.tileSize/4), gamePanel.tileSize, 0);
-				GraphicsUtil.drawCenteredString(g2, p.getUsername(), rect, new Font(FONT.getFontName(), Font.PLAIN, FONT_SIZE));
+				if(entity.getUsername() != null)
+					GraphicsUtil.drawCenteredString(g2, entity.getUsername(), rect, new Font(FONT.getFontName(), Font.PLAIN, FONT_SIZE));
 				
 				//draws player sprite
 				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
 				
-			}
-		}
-	}
-
-	public void drawEntities(Graphics2D g2) {
-		for(EntityInfo p : allEntityInfos.values()) {
-			BufferedImage[] spriteArray;
-			BufferedImage image;
-
-			try {
-				spriteArray = allEntitySprites.get(p.getId());
-				image = spriteArray[0]; //default value
-			}
-			catch(Exception e) {
-				break;
-			}
-			image = spriteArray[p.getSpriteNumber()];
-
-			int worldX = p.getEntityX();
-			int worldY = p.getEntityY();
-			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
-			int screenY = worldY - gamePanel.player.getWorldY() + gamePanel.player.screenY;
-
-			if(GraphicsUtil.isInViewport(gamePanel, worldX, worldY)){
-				//draws player sprite
-				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
-
 			}
 		}
 	}

@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public Pathfinder pathfinder;
 	
 	//game state
-	GameState gameState = GameState.Playing;
+	GameState gameState = GameState.PLAYING;
 	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));

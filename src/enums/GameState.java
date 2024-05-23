@@ -1,6 +1,6 @@
 package enums;
 
 public enum GameState {
-	Playing,
-	Typing
+	PLAYING,
+	TYPING
 }

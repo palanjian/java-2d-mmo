@@ -9,16 +9,17 @@ import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
 import main.RequestsHandler;
-import packets.PlayerInfo;
+import packets.EntityInfo;
 
 import static enums.Direction.*;
+import static enums.EntityType.PLAYER;
 
 public class Player extends Entity{
 	
 	private GamePanel gamePanel;
 	private KeyHandler keyHandler;
 	private RequestsHandler requestsHandler;
-	private static PlayerInfo playerInfo;
+	private static EntityInfo playerInfo;
 	
 	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET";
 	private int originalTileSize;
@@ -55,12 +56,14 @@ public class Player extends Entity{
 			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048
 			playerId = rand.nextInt(2048);
-			playerInfo = new PlayerInfo(playerId, gamePanel.username, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"));
+			playerInfo = new EntityInfo(PLAYER, playerId, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"), gamePanel.username);
 						
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
-			
-			//playerInfo.setSpritesheet(null);
+
+			//once we send the sprite sheet once, we dont need to keep sending it over. already saved on server/clients
+			playerInfo.setSpritesheet(null);
+
 			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);
 			
 		}
@@ -146,6 +149,6 @@ public class Player extends Entity{
 	
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
-	public PlayerInfo getPlayerInfo() { return playerInfo; }
+	public EntityInfo getPlayerInfo() { return playerInfo; }
 
 }

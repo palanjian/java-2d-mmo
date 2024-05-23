@@ -22,10 +22,10 @@ public class KeyHandler implements KeyListener {
 		
 		//special cases
 		switch(gamePanel.getGameState()) {
-			case Playing:
+			case PLAYING:
 				playingKeyPressed(code);
 				break;
-			case Typing:
+			case TYPING:
 				typingKeyPressed(code);
 				break;
 		}
@@ -47,25 +47,25 @@ public class KeyHandler implements KeyListener {
 		if(code == KeyEvent.VK_D) rightPressed = true;
 
 		if(code == KeyEvent.VK_ENTER) {
-			gamePanel.setGameState(GameState.Typing);
+			gamePanel.setGameState(GameState.TYPING);
 		}
 	}
 	
 	public void typingKeyPressed(int code) {
 		if(code == KeyEvent.VK_ENTER) {
 			gamePanel.chatHandler.sendMessage();
-			gamePanel.setGameState(GameState.Playing);
+			gamePanel.setGameState(GameState.PLAYING);
 			charStream = "";
 		}
 		if(code == KeyEvent.VK_ESCAPE) {
-			gamePanel.setGameState(GameState.Playing);
+			gamePanel.setGameState(GameState.PLAYING);
 			charStream = "";
 		}
 	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if(gamePanel.getGameState() == GameState.Typing) {
+		if(gamePanel.getGameState() == GameState.TYPING) {
 			char code = e.getKeyChar();
 			if(code >= 32 && code <= 126 && charStream.length() <= 48) {
 				//if code is between ascii values of space and ~ (no white spaces)
