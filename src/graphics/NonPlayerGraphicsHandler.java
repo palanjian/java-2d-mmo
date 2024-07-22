@@ -60,7 +60,6 @@ public class NonPlayerGraphicsHandler {
 	}
 
 	public void addSprite(EntityInfo entity) {
-		System.out.println("ADDING");
 		byte[] bytes = entity.getSpritesheet();
         InputStream is = new ByteArrayInputStream(bytes);
         BufferedImage spritesheet = null;

@@ -49,7 +49,7 @@ public class RequestsHandler implements Runnable{
 					tileHandler.service(tileMap);
 				}
 				else if (o instanceof EntityInfo entityInfo) {
-					System.out.println("RECIEVED " + entityInfo.getUsername() + "'s info");
+					//System.out.println("Recieved " + entityInfo.getUsername() + "'s Entity Information");
 					nonPlayerGraphicsHandler.service(entityInfo);
 				}
 				//if object is ChatMessage
