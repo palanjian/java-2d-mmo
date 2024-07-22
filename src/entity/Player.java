@@ -123,18 +123,7 @@ public class Player extends Entity{
 		BufferedImage image = null;
 
 		image = spriteArray[getSpriteNumber()];
-		if(direction == DOWN) {
-			image = spriteArray[0 + animState];
-		}
-		if(direction == LEFT) {
-			image = spriteArray[4 + animState];
-		}
-		if(direction == RIGHT) {
-			image = spriteArray[8 + animState];
-		}
-		if(direction == UP) {
-			image = spriteArray[12 + animState];
-		}
+
 		g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
 	}
 
