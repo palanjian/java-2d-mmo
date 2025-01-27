@@ -14,7 +14,6 @@ public class ChatMessage implements Serializable{
 		this.message = message;
 		this.sender = sender;
 	}
-	
 	public String getMessage() { return message; }
 	public void setMessage(String message) { this.message = message; }
 	public String getSender() { return sender; }

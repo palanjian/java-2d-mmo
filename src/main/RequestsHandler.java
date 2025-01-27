@@ -46,10 +46,26 @@ public class RequestsHandler implements Runnable{
 				//if object is TileMap
 				if(o instanceof TileMap tileMap) {
 					System.out.println("Recieved new tilemap.");
+
+					//if they recieve a new map, that means theyre going to a new world. remove all the infos
+					nonPlayerGraphicsHandler.removeAllInfos();
+
 					tileHandler.service(tileMap);
 				}
+
+				//AWFUL CODE
 				else if (o instanceof EntityInfo entityInfo) {
-					System.out.println("RECIEVED " + entityInfo.getUsername() + "'s info");
+					if(entityInfo.getId() == gamePanel.player.playerId){
+						gamePanel.player.getPlayerInfo().updatePosition(entityInfo.getWorldX(), entityInfo.getWorldY(), entityInfo.getDirection(), entityInfo.getSpriteNumber());
+						gamePanel.player.worldX = entityInfo.getWorldX();
+						gamePanel.player.worldY = entityInfo.getWorldY();
+						continue;
+					}
+					else if(entityInfo.getId() == gamePanel.player.playerId + 5000){
+						gamePanel.player.pet.worldX = entityInfo.getWorldX();
+						gamePanel.player.pet.worldY = entityInfo.getWorldY();
+						continue;
+					}
 					nonPlayerGraphicsHandler.service(entityInfo);
 				}
 				//if object is ChatMessage

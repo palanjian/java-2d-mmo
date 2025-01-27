@@ -47,6 +47,7 @@ public class NonPlayerGraphicsHandler {
 		if (spritesheet != null) {
 			addSprite(entity);
 		}
+		else System.out.println("Recieved entity info but no sprite");
 	}
 
 	public void addEntityInfo(EntityInfo entity) {
@@ -60,7 +61,7 @@ public class NonPlayerGraphicsHandler {
 	}
 
 	public void addSprite(EntityInfo entity) {
-		System.out.println("ADDING");
+		//System.out.println("Adding sprite for entity with ID: " + entity.getId() + " and username: " + entity.getUsername());
 		byte[] bytes = entity.getSpritesheet();
         InputStream is = new ByteArrayInputStream(bytes);
         BufferedImage spritesheet = null;
@@ -89,10 +90,11 @@ public class NonPlayerGraphicsHandler {
 				image = spriteArray[0]; //default value
 			}
 			catch(Exception e) {
+				//System.out.println(e.getMessage() + " for player " + entity.getId());
 				break;
 			}
 			image = spriteArray[entity.getSpriteNumber()];
-			
+
 			int worldX = entity.getWorldX();
 			int worldY = entity.getWorldY();
 			int screenX = worldX - gamePanel.player.getWorldX() + gamePanel.player.screenX;
@@ -106,9 +108,12 @@ public class NonPlayerGraphicsHandler {
 				
 				//draws player sprite
 				g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
-				
 			}
 		}
 	}
 
+	public void removeAllInfos() {
+		allEntityInfos = new HashMap<>();
+		allEntitySprites = new HashMap<>();
+	}
 }
