@@ -15,7 +15,7 @@ import static enums.EntityType.PET;
 public class Pet extends Entity{
 
 	Player player;
-	private static EntityInfo entityInfo;
+	public static EntityInfo entityInfo;
 	private String entitySkinFileName = "entities/SNOWMAN_SPRITESHEET";
 	boolean isFindingPath;
 

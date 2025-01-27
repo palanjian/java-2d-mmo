@@ -1,6 +1,6 @@
 package graphics;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import main.GamePanel;
@@ -29,7 +29,14 @@ public class TileHandler {
 		for(int layer = 0; layer< tileMap.getLayers(); ++layer) {
 			for(int row = 0; row < tileMap.getRows(); ++row) {
 				for(int col = 0; col < tileMap.getColumns(); ++col) {
-					int whichTile = tileMap.getTextureMap()[layer][row][col];
+					int whichTile = 0;
+					try {
+						whichTile = tileMap.getTextureMap()[layer][row][col];
+					}
+					catch(Exception e){
+						System.out.println(e.getMessage());
+						continue;
+					}
 					//mathematics to determine tile's screen position
 					int worldX = col*gamePanel.tileSize;
 					int worldY = row*gamePanel.tileSize;

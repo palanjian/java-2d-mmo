@@ -61,9 +61,10 @@ public class Player extends Entity{
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
 
-			//once we send the sprite sheet once, we dont need to keep sending it over. already saved on server/clients
-			playerInfo.setSpritesheet(null);
+			//TODO: once we send the sprite sheet once, we dont need to keep sending it over. already saved on server/clients
+			//playerInfo.setSpritesheet(null);
 
+			System.out.println(worldX + " " + worldY);
 			spriteArray = GraphicsUtil.getSpriteArray(GraphicsUtil.loadImage(playerSkinFileName), 4, 4, originalTileSize);
 			
 		}
@@ -86,7 +87,7 @@ public class Player extends Entity{
 		collisionBox.y = 6 * gamePanel.scale;
 		collisionBox.height = 8 * gamePanel.scale;
 		collisionBox.width = 8 * gamePanel.scale;
-		}
+	}
 	
 	public void update() {
 		if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
