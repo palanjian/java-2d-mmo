@@ -9,7 +9,7 @@ import graphics.GraphicsUtil;
 import main.GamePanel;
 import main.KeyHandler;
 import main.RequestsHandler;
-import packets.EntityInfo;
+import packets.EntityPacket;
 
 import static enums.Direction.*;
 import static enums.EntityType.PLAYER;
@@ -19,7 +19,7 @@ public class Player extends Entity{
 	private GamePanel gamePanel;
 	private KeyHandler keyHandler;
 	private RequestsHandler requestsHandler;
-	private static EntityInfo playerInfo;
+	private static EntityPacket playerInfo;
 	
 	private String playerSkinFileName = "players/DEFAULT_SPRITESHEET";
 	private int originalTileSize;
@@ -35,8 +35,6 @@ public class Player extends Entity{
 
 	public int screenX;
 	public int screenY;
-	
-	public Entity pet;
 	public int playerId;
 
 	public Player(GamePanel gamePanel, KeyHandler keyHandler) {
@@ -56,7 +54,7 @@ public class Player extends Entity{
 			setDefaultValues();			
 			//for now, unique identifier for each player is a random int of upper bound 2048
 			playerId = rand.nextInt(2048);
-			playerInfo = new EntityInfo(PLAYER, playerId, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"), gamePanel.username);
+			playerInfo = new EntityPacket(PLAYER, playerId, worldX, worldY, direction, 0, GraphicsUtil.bufferedImageToBytes(GraphicsUtil.loadImage(playerSkinFileName), "PNG"), gamePanel.username);
 						
 			//sends initial location
 			requestsHandler.sendObject(playerInfo);
@@ -72,8 +70,6 @@ public class Player extends Entity{
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
-		pet = new Pet(gamePanel, this);
-
 	}
 	
 	public void setDefaultValues() {
@@ -150,6 +146,6 @@ public class Player extends Entity{
 	
 	public int getWorldX() { return worldX; }
 	public int getWorldY() { return worldY; }
-	public EntityInfo getPlayerInfo() { return playerInfo; }
+	public EntityPacket getPlayerInfo() { return playerInfo; }
 
 }

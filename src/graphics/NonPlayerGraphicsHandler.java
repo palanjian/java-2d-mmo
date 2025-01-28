@@ -8,17 +8,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import main.GamePanel;
-import packets.EntityInfo;
+import packets.EntityPacket;
 
 public class NonPlayerGraphicsHandler {
 	
 	private GamePanel gamePanel;
-	private Map<Integer, EntityInfo> allEntityInfos;
+	private Map<Integer, EntityPacket> allEntityInfos;
 	private Map<Integer, BufferedImage[]> allEntitySprites;
 
 
@@ -34,7 +33,7 @@ public class NonPlayerGraphicsHandler {
 		allEntitySprites = new HashMap<>();
 	}
 
-	public void service(EntityInfo entity) {
+	public void service(EntityPacket entity) {
 		if (!entity.getOnline()) {
 			// When an entity disconnects
 			removeEntityInfo(entity);
@@ -47,20 +46,20 @@ public class NonPlayerGraphicsHandler {
 		if (spritesheet != null) {
 			addSprite(entity);
 		}
-		else System.out.println("Recieved entity info but no sprite");
+		else System.out.println("Received entity info but no sprite");
 	}
 
-	public void addEntityInfo(EntityInfo entity) {
+	public void addEntityInfo(EntityPacket entity) {
 		allEntityInfos.put(entity.getId(), entity);
 	}
-	public void removeEntitySprite(EntityInfo entity) {
+	public void removeEntitySprite(EntityPacket entity) {
 		allEntitySprites.remove(entity.getId()); //O(1)
 	}
-	public void removeEntityInfo(EntityInfo entity) {
+	public void removeEntityInfo(EntityPacket entity) {
 		allEntityInfos.remove(entity.getId()); //O(1)
 	}
 
-	public void addSprite(EntityInfo entity) {
+	public void addSprite(EntityPacket entity) {
 		//System.out.println("Adding sprite for entity with ID: " + entity.getId() + " and username: " + entity.getUsername());
 		byte[] bytes = entity.getSpritesheet();
         InputStream is = new ByteArrayInputStream(bytes);
@@ -76,12 +75,11 @@ public class NonPlayerGraphicsHandler {
 
 	public void draw(Graphics2D g2) {
 		g2.setColor(Color.WHITE);
-		
 		drawEntities(g2);
 	}
 
 	public void drawEntities(Graphics2D g2) {
-		for(EntityInfo entity : allEntityInfos.values()) {
+		for(EntityPacket entity : allEntityInfos.values()) {
 			BufferedImage[] spriteArray;
 			BufferedImage image;
 			

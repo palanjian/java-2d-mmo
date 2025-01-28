@@ -16,7 +16,6 @@ import entity.Player;
 import enums.GameState;
 import graphics.Debugger;
 import graphics.TileHandler;
-import npc.Pathfinder;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable{
@@ -57,9 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
 	private String fontFileName = "fonts/chatfont";
 	public int fontSize = 24; //px
 	public Font font;
-	
-	public Pathfinder pathfinder;
-	
+
 	//game state
 	GameState gameState = GameState.PLAYING;
 	
@@ -136,7 +133,6 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 		player.update();
-		player.pet.update();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -145,7 +141,6 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		requestsHandler.draw(g2);
 		player.draw(g2);
-		player.pet.draw(g2); //temporary
 
 		//temp
 		Debugger.draw(g2, this);

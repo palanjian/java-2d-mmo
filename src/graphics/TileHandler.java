@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import main.GamePanel;
-import npc.Pathfinder;
 import packets.TileMap;
 
 public class TileHandler {
@@ -21,7 +20,6 @@ public class TileHandler {
 	
 	public void service(TileMap tileMap){
 		this.tileMap = tileMap;
-		gamePanel.pathfinder = new Pathfinder(gamePanel);
 	}
 	
 	public void draw(Graphics2D g2) {

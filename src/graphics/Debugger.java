@@ -2,11 +2,8 @@ package graphics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 import entity.Entity;
-import entity.Pet;
-import entity.Player;
 import main.GamePanel;
 
 public class Debugger {
@@ -20,7 +17,7 @@ public class Debugger {
 		//drawHitboxes(g2, gamePanel.player.pet, Color.blue);
 	}
 	
-	public static void drawPathfinding(Graphics2D g2) {
+	/*public static void drawPathfinding(Graphics2D g2) {
 		//pathfinding test
 		
 		g2.setColor(Color.red);
@@ -32,7 +29,8 @@ public class Debugger {
 			
 			g2.fillRect(screenX, screenY, gamePanel.tileSize, gamePanel.tileSize);
 		} 
-	}
+	} */
+
 	public static void drawHitboxes(Graphics2D g2, Entity e, Color c) {
 		g2.setColor(c);
 		int boxX = e.worldX + e.collisionBox.x;

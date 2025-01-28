@@ -9,7 +9,7 @@ import java.net.SocketException;
 import graphics.NonPlayerGraphicsHandler;
 import graphics.TileHandler;
 import packets.ChatMessage;
-import packets.EntityInfo;
+import packets.EntityPacket;
 import packets.TileMap;
 
 public class RequestsHandler implements Runnable{
@@ -49,24 +49,22 @@ public class RequestsHandler implements Runnable{
 
 					//if they recieve a new map, that means theyre going to a new world. remove all the infos
 					nonPlayerGraphicsHandler.removeAllInfos();
-
 					tileHandler.service(tileMap);
 				}
 
 				//AWFUL CODE
-				else if (o instanceof EntityInfo entityInfo) {
-					if(entityInfo.getId() == gamePanel.player.playerId){
-						gamePanel.player.getPlayerInfo().updatePosition(entityInfo.getWorldX(), entityInfo.getWorldY(), entityInfo.getDirection(), entityInfo.getSpriteNumber());
-						gamePanel.player.worldX = entityInfo.getWorldX();
-						gamePanel.player.worldY = entityInfo.getWorldY();
-						continue;
+				else if (o instanceof EntityPacket entityPacket) {
+					//if the player is receiving information about themselves.
+					if(entityPacket.getId() == gamePanel.player.playerId){
+						gamePanel.player.getPlayerInfo().updatePosition(entityPacket.getWorldX(), entityPacket.getWorldY(), entityPacket.getDirection(), entityPacket.getSpriteNumber());
+						gamePanel.player.worldX = entityPacket.getWorldX();
+						gamePanel.player.worldY = entityPacket.getWorldY();
 					}
-					else if(entityInfo.getId() == gamePanel.player.playerId + 5000){
-						gamePanel.player.pet.worldX = entityInfo.getWorldX();
-						gamePanel.player.pet.worldY = entityInfo.getWorldY();
-						continue;
+					//if the player is receiving information about another entity
+					else{
+						System.out.println("Got entity info for an entity named " + entityPacket.getUsername());
+						nonPlayerGraphicsHandler.service(entityPacket);
 					}
-					nonPlayerGraphicsHandler.service(entityInfo);
 				}
 				//if object is ChatMessage
 				else if(o instanceof ChatMessage chatMessage) {

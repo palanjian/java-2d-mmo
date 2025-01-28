@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 
 import enums.GameState;
 import packets.ChatMessage;
-import packets.EntityInfo;
+import packets.EntityPacket;
 
 public class ChatHandler {
 	private GamePanel gamePanel;
@@ -70,7 +70,7 @@ public class ChatHandler {
 	public void sendMessage() {
 		RequestsHandler requestsHandler = gamePanel.requestsHandler;
 		if(!keyHandler.getCharStream().strip().equals("")) {
-			EntityInfo playerInfo = gamePanel.player.getPlayerInfo();
+			EntityPacket playerInfo = gamePanel.player.getPlayerInfo();
 			ChatMessage chatMessage = new ChatMessage(keyHandler.getCharStream(), playerInfo.getUsername()); // change to username
 			requestsHandler.sendObject(chatMessage);
 		}
