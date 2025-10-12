@@ -20,7 +20,6 @@ public abstract class Entity {
 	protected int epsilon = 0;
 	protected int animState = 0;
 	protected int animLeftOrRight = 0;
-	public void service() { }
 	public boolean moveCondition() { return true; };
 	public BufferedImage[] spriteArray;
 

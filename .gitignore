@@ -1,7 +1,6 @@
 .settings
 .metadata
 TODO.md
-NOTES.md
 bin/
 /target/
 .idea
